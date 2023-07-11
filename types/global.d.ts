@@ -2,7 +2,7 @@
 // then you can delete this file
 
 declare const process: {
-    env: {
-        NODE_ENV: 'production' | 'development'
-    }
-}
+  env: {
+    NODE_ENV: 'production' | 'development';
+  };
+};
