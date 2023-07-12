@@ -1,31 +1,34 @@
 import { Scene } from 'phaser';
+import { PlayerController } from './_core/player-controller/player-controller';
 
 export default class Index extends Scene {
+  private player!: PlayerController;
+
   constructor() {
     super('Index');
   }
 
   preload() {
-    this.load.image('logo', 'assets/sprite.png');
+    this.load.image('monster', 'assets/sprite.png');
+    PlayerController.preloadWithLoader(this.load);
   }
 
   create() {
-    const logo = this.add.image(400, 70, 'logo');
+    const monster = this.physics.add.image(200, 70, 'monster');
+    monster.body.setCollideWorldBounds(true);
+    this.player = new PlayerController(400, 70, this);
+    this.physics.collide(this.player.getImageWithDynamicBody(), monster);
+    this.cameras.main.startFollow(this.player.getImageWithDynamicBody());
+  }
 
-    this.tweens.add({
-      targets: logo,
-      y: 350,
-      duration: 1500,
-      ease: 'Sine.inOut',
-      yoyo: true,
-      repeat: -1,
-    });
+  update() {
+    this.player.update();
   }
 }
 
 new Phaser.Game({
-  width: 1920,
-  height: 1080,
+  width: 1024,
+  height: 576,
   type: Phaser.WEBGL,
   backgroundColor: '#2f2f2f',
   physics: {
@@ -39,4 +42,5 @@ new Phaser.Game({
     autoCenter: Phaser.Scale.Center.CENTER_BOTH,
   },
   scene: Index,
+  antialias: false,
 });
