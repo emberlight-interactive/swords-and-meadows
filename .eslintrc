@@ -9,6 +9,16 @@
     "prettier"
   ],
   "rules": {
+    "@typescript-eslint/explicit-member-accessibility": ["error", {
+      "accessibility": "explicit",
+      "overrides": {
+        "accessors": "explicit",
+        "constructors": "no-public",
+        "methods": "explicit",
+        "properties": "explicit",
+        "parameterProperties": "explicit"
+      }
+    }],
     "prettier/prettier": "error",
     "block-scoped-var": "error",
     "eqeqeq": "error",
@@ -54,6 +64,7 @@
         "node/shebang": "off",
         "node/no-unpublished-import": "off",
         "node/no-unpublished-require": "off",
+        "node/no-extraneous-import": "off",
         "no-dupe-class-members": "off",
         "require-atomic-updates": "off"
       },

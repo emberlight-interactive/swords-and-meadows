@@ -1,28 +1,55 @@
 import { Scene } from 'phaser';
-import { PlayerController } from './_core/player-controller/player-controller';
+import { PlayerEntity } from './core/player-entity/player-entity';
+import { GameState } from './shared/network/networked-state/networked-state';
+import { ClientNetworkManager } from './shared/network/client-network-manager';
+import { PlayerBroadcasterEntity } from './core/player/player-broadcaster-entity';
+import { PlayerRecieverEntity } from './core/player/player-reciever-entity';
+import {
+  IPlayerState,
+  PlayerState,
+} from './shared/network/networked-state/player-networked-state';
 
 export default class Index extends Scene {
-  private player!: PlayerController;
+  private clientNetworkManager!: ClientNetworkManager<GameState>;
+  private debugFPS!: Phaser.GameObjects.Text;
 
   constructor() {
     super('Index');
   }
 
-  preload() {
+  public preload() {
     this.load.image('monster', 'assets/sprite.png');
-    PlayerController.preloadWithLoader(this.load);
+    PlayerEntity.preloadWithLoader(this.load);
   }
 
-  create() {
-    const monster = this.physics.add.image(200, 70, 'monster');
-    monster.body.setCollideWorldBounds(true);
-    this.player = new PlayerController(400, 70, this);
-    this.physics.collide(this.player.getImageWithDynamicBody(), monster);
-    this.cameras.main.startFollow(this.player.getImageWithDynamicBody());
+  public async create() {
+    this.debugFPS = this.add.text(4, 4, '', { color: '#ff0000' });
+
+    this.clientNetworkManager = new ClientNetworkManager<GameState>();
+    await this.clientNetworkManager.connect();
+
+    this.clientNetworkManager.registerEntity<PlayerState>(
+      this.clientNetworkManager.room.state.players,
+      (stateRef: IPlayerState) =>
+        new PlayerBroadcasterEntity(
+          this,
+          new PlayerEntity(stateRef.x, stateRef.y, this)
+        ),
+      (stateRef: IPlayerState) =>
+        new PlayerRecieverEntity(
+          new PlayerEntity(stateRef.x, stateRef.y, this)
+        ),
+      'player-entity'
+    );
   }
 
-  update() {
-    this.player.update();
+  public update(time: number, delta: number): void {
+    this.debugFPS.text = `Frame rate: ${this.game.loop.actualFps}`;
+    if (this.clientNetworkManager.connectionStatus !== 'connected') {
+      return;
+    }
+
+    this.clientNetworkManager.fixedTick(delta);
   }
 }
 
