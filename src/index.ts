@@ -8,6 +8,7 @@ import {
   IPlayerState,
   PlayerState,
 } from './shared/network/networked-state/player-networked-state';
+import { gameConfig } from './shared/game-config';
 
 export default class Index extends Scene {
   private clientNetworkManager!: ClientNetworkManager<GameState>;
@@ -18,7 +19,6 @@ export default class Index extends Scene {
   }
 
   public preload() {
-    this.load.image('monster', 'assets/sprite.png');
     PlayerEntity.preloadWithLoader(this.load);
   }
 
@@ -53,21 +53,4 @@ export default class Index extends Scene {
   }
 }
 
-new Phaser.Game({
-  width: 1024,
-  height: 576,
-  type: Phaser.WEBGL,
-  backgroundColor: '#2f2f2f',
-  physics: {
-    default: 'arcade',
-    arcade: {
-      debug: process.env.NODE_ENV === 'development',
-    },
-  },
-  scale: {
-    mode: Phaser.Scale.ScaleModes.FIT,
-    autoCenter: Phaser.Scale.Center.CENTER_BOTH,
-  },
-  scene: Index,
-  antialias: false,
-});
+new Phaser.Game({ ...gameConfig, scene: Index });

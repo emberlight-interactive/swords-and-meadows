@@ -1,4 +1,5 @@
 // @ts-check
+/// <reference types="./types/global.d.ts" />
 
 const path = require('path');
 const webpack = require('webpack');
@@ -8,7 +9,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = /** @type { import('webpack').Configuration } */ ({
   entry: {
-    main: './src/index.ts',
+    main: process.env.SCENE.replace('\\', '/') || './src/index.ts',
   },
   optimization: {
     splitChunks: {
