@@ -9,7 +9,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = /** @type { import('webpack').Configuration } */ ({
   entry: {
-    main: process.env.SCENE.replace('\\', '/') || './src/index.ts',
+    main: process.env.SCENE?.replace('\\', '/') || './src/index.ts',
   },
   optimization: {
     splitChunks: {
