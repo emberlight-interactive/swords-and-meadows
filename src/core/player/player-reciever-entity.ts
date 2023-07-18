@@ -1,5 +1,6 @@
 import { Destroyable } from '~/shared/entities/destroyable';
 import { XYTransformable } from '~/shared/entities/x-y-transformable';
+import { env } from '../../shared/env/env';
 import { NetworkRecieverEntity } from '~/shared/network/client-network-manager';
 import { IPlayerState } from '~/shared/network/networked-state/player-networked-state';
 
@@ -13,17 +14,17 @@ export class PlayerRecieverEntity
 
   constructor(private playerEntity: XYTransformable & Destroyable) {}
 
-  public update() {
+  public tick() {
     this.playerEntity.x = Phaser.Math.Linear(
       this.playerEntity.x,
       this.stateRef.x,
-      0.2
+      env.interpolationFactor
     );
 
     this.playerEntity.y = Phaser.Math.Linear(
       this.playerEntity.y,
       this.stateRef.y,
-      0.2
+      env.interpolationFactor
     );
   }
 

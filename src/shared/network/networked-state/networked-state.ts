@@ -8,6 +8,10 @@ export class GameState extends Schema {
   @type({ map: PlayerState }) public players = new MapSchema<PlayerState>();
 }
 
+export interface InputAndStateSync {
+  tick: number;
+}
+
 export enum InputKey {
   PlayerState,
 }

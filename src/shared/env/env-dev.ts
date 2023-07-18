@@ -5,5 +5,7 @@ export const envDev: Env = {
   serverHttpUrl: 'http://localhost:2567',
   serverPort: 2567,
   serverRoomName: 'main',
-  fixedTimeStep: 1000 / 60,
+  clientFixedTimeStep: 1000 / 60,
+  serverFixedTimeStep: 1000 / 12,
+  interpolationFactor: 0.12,
 };

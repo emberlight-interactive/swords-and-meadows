@@ -1,8 +1,3 @@
-// PER TICK INPUT - send state modification (input), modify local state, store expected local state at tick #, render
-// PER TICK RETRIEVAL - compare buffered local state for that tick, if server and local state match then continue, otherwise override local state to match server state
-// if tick from server is a future tick indicating a lost packet then skip verification and move to the tick
-// Once buffer reaches certain size disconnect game
-
 import { MapSchema, Schema } from '@colyseus/schema';
 import { Room, Client } from 'colyseus.js';
 import { env } from '../env/env';
@@ -11,29 +6,23 @@ import {
   NetworkedStateBundle,
 } from './networked-state/networked-state';
 
-// ClientManager cannot map sessionids to network entities because they are generics
-
-// bundle state, input, modification rules
-
 export interface NetworkBroadcastEntity<
   TNetworkStateBundle extends NetworkedStateBundle<object, InputKey, object>,
 > {
   readonly inputKey: TNetworkStateBundle['inputKey'];
   getCurrentInput: (currentTick: number) => TNetworkStateBundle['input'];
-  update: () => void;
+  tick: () => void;
 
-  reconcileState(stateRef: TNetworkStateBundle['state']): void; // + private stateQueue for record keeping
+  reconcileState(stateRef: TNetworkStateBundle['state']): void;
 
   destroy: () => void;
 }
 
 export interface NetworkRecieverEntity<TState> {
   setState(stateRef: TState): void;
-  update(): void;
+  tick(): void;
   destroy(): void;
 }
-
-// Shared state, tickFreq, simuations
 
 export class ClientNetworkManager<TGameState extends Schema> {
   public connectionStatus: 'connected' | 'disconnected' | 'connecting' =
@@ -54,7 +43,7 @@ export class ClientNetworkManager<TGameState extends Schema> {
   >();
 
   private elapsedTime = 0;
-  private fixedTimeStep = env.fixedTimeStep;
+  private fixedTimeStep = env.clientFixedTimeStep;
 
   private currentTick: number = 0;
 
@@ -92,7 +81,7 @@ export class ClientNetworkManager<TGameState extends Schema> {
               broadcasterEntity.inputKey,
               broadcasterEntity.getCurrentInput(currTick)
             );
-            broadcasterEntity.update();
+            broadcasterEntity.tick();
           }
         );
 
@@ -105,7 +94,7 @@ export class ClientNetworkManager<TGameState extends Schema> {
         const recieverEntity = entityRecieverFactory(state);
         recieverEntity.setState(state);
         this.networkRecieverEntityCallbacks.set(entityKey, () =>
-          recieverEntity.update()
+          recieverEntity.tick()
         );
         state.onRemove(() => {
           recieverEntity.destroy();

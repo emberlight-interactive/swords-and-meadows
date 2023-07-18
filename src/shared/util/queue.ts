@@ -17,4 +17,9 @@ export class Queue<T> {
   public length() {
     return this.a.length + this.b.length;
   }
+
+  public getAtIndex(index: number) {
+    if (index >= this.b.length) return this.a[index - this.b.length];
+    else return this.b[this.b.length - 1 - index];
+  }
 }

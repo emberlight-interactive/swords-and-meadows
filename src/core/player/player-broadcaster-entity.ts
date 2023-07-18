@@ -8,7 +8,8 @@ import {
   IPlayerState,
   playerStateModification,
 } from '../../shared/network/networked-state/player-networked-state';
-import { Destroyable } from '~/shared/entities/destroyable';
+import { Destroyable } from '../../shared/entities/destroyable';
+import { ObjectCollectionBuffer } from '../../shared/util/object-collection-buffer';
 
 export class PlayerBroadcasterEntity
   implements NetworkBroadcastEntity<PlayerNetworkedStateBundle>
@@ -24,6 +25,8 @@ export class PlayerBroadcasterEntity
     down: false,
     tick: 0,
   };
+
+  private playerInputBuffer = new ObjectCollectionBuffer<IPlayerInput>();
 
   private state: IPlayerState = ((parentThis: PlayerBroadcasterEntity) => {
     return new (class {
@@ -57,6 +60,8 @@ export class PlayerBroadcasterEntity
     this.playerInput.down = this.cursorKeys?.down.isDown || false;
     this.playerInput.tick = currentTick;
 
+    this.playerInputBuffer.add(this.playerInput);
+
     return this.playerInput;
   }
 
@@ -65,10 +70,21 @@ export class PlayerBroadcasterEntity
   }
 
   public reconcileState(stateRef: IPlayerState) {
-    void stateRef;
+    let historicalInput: IPlayerInput | undefined;
+
+    while ((historicalInput = this.playerInputBuffer.shift())) {
+      // debugger;
+      if (stateRef.tick === historicalInput.tick) {
+        Object.assign(this.state, stateRef);
+        for (const v of this.playerInputBuffer.iterable()) {
+          playerStateModification(v, this.state);
+        }
+        break;
+      }
+    }
   }
 
-  public update() {
+  public tick() {
     playerStateModification(this.playerInput, this.state);
   }
 }
