@@ -19,7 +19,7 @@ export default class Index extends Scene {
   }
 
   public preload() {
-    PlayerEntity.preloadWithLoader(this.load);
+    PlayerEntity.preload(this.load);
   }
 
   public async create() {

@@ -8,7 +8,7 @@ export default class WizardTest extends Scene {
   }
 
   public preload() {
-    PlayerEntity.preloadWithLoader(this.load);
+    PlayerEntity.preload(this.load);
   }
 
   public async create() {
