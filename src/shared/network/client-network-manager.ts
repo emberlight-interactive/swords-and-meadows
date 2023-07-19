@@ -2,14 +2,19 @@ import { MapSchema, Schema } from '@colyseus/schema';
 import { Room, Client } from 'colyseus.js';
 import { env } from '../env/env';
 import {
-  InputKey,
+  NetworkCommKey,
   NetworkedStateBundle,
 } from './networked-state/networked-state';
+import { FixedTickManager } from '../util/fixed-tick-manager';
 
 export interface NetworkBroadcastEntity<
-  TNetworkStateBundle extends NetworkedStateBundle<object, InputKey, object>,
+  TNetworkStateBundle extends NetworkedStateBundle<
+    object,
+    NetworkCommKey,
+    object
+  >,
 > {
-  readonly inputKey: TNetworkStateBundle['inputKey'];
+  readonly networkCommKey: TNetworkStateBundle['inputKey'];
   getCurrentInput: (currentTick: number) => TNetworkStateBundle['input'];
   tick: () => void;
 
@@ -42,10 +47,7 @@ export class ClientNetworkManager<TGameState extends Schema> {
     (currTick: number) => void
   >();
 
-  private elapsedTime = 0;
-  private fixedTimeStep = env.clientFixedTimeStep;
-
-  private currentTick: number = 0;
+  constructor(private fixedTickManager = new FixedTickManager()) {}
 
   public async connect() {
     console.log('Trying to connect with the server...');
@@ -65,7 +67,9 @@ export class ClientNetworkManager<TGameState extends Schema> {
     mapSchemaRef: MapSchema<TState, string>,
     entityBroadcasterFactory: (
       stateRef: TState
-    ) => NetworkBroadcastEntity<NetworkedStateBundle<object, InputKey, TState>>,
+    ) => NetworkBroadcastEntity<
+      NetworkedStateBundle<object, NetworkCommKey, TState>
+    >,
     entityRecieverFactory: (stateRef: TState) => NetworkRecieverEntity<TState>,
     uniquieEntityKey: string
   ) {
@@ -78,7 +82,7 @@ export class ClientNetworkManager<TGameState extends Schema> {
           entityKey,
           (currTick: number) => {
             this._room.send(
-              broadcasterEntity.inputKey,
+              broadcasterEntity.networkCommKey,
               broadcasterEntity.getCurrentInput(currTick)
             );
             broadcasterEntity.tick();
@@ -105,21 +109,16 @@ export class ClientNetworkManager<TGameState extends Schema> {
   }
 
   public fixedTick(delta: number) {
-    this.currentTick++;
-    this.elapsedTime += delta;
-    while (this.elapsedTime >= this.fixedTimeStep) {
-      this.elapsedTime -= this.fixedTimeStep;
-      this.runTick();
-    }
+    this.fixedTickManager.runTick(delta, this.runTick);
   }
 
-  private runTick() {
+  private runTick = () => {
     this.networkBroadcastEntityCallbacks.forEach(entity =>
-      entity(this.currentTick)
+      entity(this.fixedTickManager.getTick())
     );
 
     this.networkRecieverEntityCallbacks.forEach(entity =>
-      entity(this.currentTick)
+      entity(this.fixedTickManager.getTick())
     );
-  }
+  };
 }

@@ -1,7 +1,7 @@
 import { Schema, type } from '@colyseus/schema';
 import {
   InputAndStateSync,
-  InputKey,
+  NetworkCommKey,
   NetworkedStateBundle,
 } from './networked-state';
 
@@ -45,6 +45,6 @@ export const playerStateModification = (
 
 export type PlayerNetworkedStateBundle = NetworkedStateBundle<
   IPlayerInput,
-  InputKey.PlayerState,
+  NetworkCommKey.PlayerState,
   IPlayerState
 >;

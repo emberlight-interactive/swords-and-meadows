@@ -12,11 +12,15 @@ export interface InputAndStateSync {
   tick: number;
 }
 
-export enum InputKey {
+export enum NetworkCommKey {
   PlayerState,
 }
 
-export type NetworkedStateBundle<TInput, TInputKey extends InputKey, TState> = {
+export type NetworkedStateBundle<
+  TInput,
+  TInputKey extends NetworkCommKey,
+  TState,
+> = {
   input: TInput;
   inputKey: TInputKey;
   state: TState;
