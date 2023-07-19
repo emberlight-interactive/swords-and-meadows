@@ -9,6 +9,7 @@ import {
   PlayerState,
 } from './shared/network/networked-state/player-networked-state';
 import { gameConfig } from './shared/game-config';
+import { WandEntity } from './core/wand-entity/wand-entity';
 
 export default class Index extends Scene {
   private clientNetworkManager!: ClientNetworkManager<GameState>;
@@ -20,6 +21,7 @@ export default class Index extends Scene {
 
   public preload() {
     PlayerEntity.preload(this.load);
+    WandEntity.preload(this.load);
   }
 
   public async create() {
@@ -33,7 +35,8 @@ export default class Index extends Scene {
       (stateRef: IPlayerState) =>
         new PlayerBroadcasterEntity(
           this,
-          new PlayerEntity(stateRef.x, stateRef.y, this)
+          new PlayerEntity(stateRef.x, stateRef.y, this),
+          new WandEntity(0, 0, this)
         ),
       (stateRef: IPlayerState) =>
         new PlayerRecieverEntity(
