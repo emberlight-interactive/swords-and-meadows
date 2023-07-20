@@ -32,16 +32,21 @@ export default class Index extends Scene {
 
     this.clientNetworkManager.registerEntity<PlayerState>(
       this.clientNetworkManager.room.state.players,
-      (stateRef: IPlayerState) =>
-        new PlayerBroadcasterEntity(
+      (stateRef: IPlayerState) => {
+        const wand = new WandEntity(0, 0, this);
+        return new PlayerBroadcasterEntity(
           this,
-          new PlayerEntity(stateRef.x, stateRef.y, this),
-          new WandEntity(0, 0, this)
-        ),
-      (stateRef: IPlayerState) =>
-        new PlayerRecieverEntity(
-          new PlayerEntity(stateRef.x, stateRef.y, this)
-        ),
+          new PlayerEntity(stateRef.x, stateRef.y, wand, this),
+          wand
+        );
+      },
+      (stateRef: IPlayerState) => {
+        const wand = new WandEntity(0, 0, this);
+        return new PlayerRecieverEntity(
+          new PlayerEntity(stateRef.x, stateRef.y, wand, this),
+          wand
+        );
+      },
       'player-entity'
     );
   }

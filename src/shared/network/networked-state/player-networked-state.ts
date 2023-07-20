@@ -10,16 +10,19 @@ export interface IPlayerInput extends InputAndStateSync {
   right: boolean;
   up: boolean;
   down: boolean;
+  relativeMouseAngle: number;
 }
 
 export interface IPlayerState extends InputAndStateSync {
   x: number;
   y: number;
+  relativeMouseAngle: number;
 }
 
 export class PlayerState extends Schema implements IPlayerState {
   @type('number') public x: number = 0;
   @type('number') public y: number = 0;
+  @type('number') public relativeMouseAngle: number = 0;
   @type('number') public tick: number = 0;
 }
 
@@ -40,6 +43,7 @@ export const playerStateModification = (
     state.y += velocity;
   }
 
+  state.relativeMouseAngle = input.relativeMouseAngle;
   state.tick = input.tick;
 };
 
