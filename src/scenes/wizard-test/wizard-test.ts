@@ -2,9 +2,11 @@ import { Scene } from 'phaser';
 import { PlayerEntity } from '../../core/player-entity/player-entity';
 import { gameConfig } from '../../shared/game-config';
 import { WandEntity } from '../../core/wand-entity/wand-entity';
-import { PlayerBroadcasterEntity } from '../../core/player/player-broadcaster-entity';
+import {
+  PlayerBroadcasterEntity,
+  PlayerInputHandler,
+} from '../../core/player/player-broadcaster-entity';
 import { FixedTickManager } from '../../shared/util/fixed-tick-manager';
-import { OfflineDirectionalInputHandler } from '../../shared/input-handlers/offline-directional-input-handler';
 
 export default class WizardTest extends Scene {
   private player!: PlayerBroadcasterEntity;
@@ -19,11 +21,12 @@ export default class WizardTest extends Scene {
   }
 
   public async create() {
+    const playerWand = new WandEntity(0, 0, this);
     this.player = new PlayerBroadcasterEntity(
       this,
-      new PlayerEntity(400, 400, this),
-      new WandEntity(0, 0, this),
-      new OfflineDirectionalInputHandler(this)
+      new PlayerEntity(400, 400, playerWand, this),
+      playerWand,
+      new PlayerInputHandler(this, playerWand, false)
     );
   }
 

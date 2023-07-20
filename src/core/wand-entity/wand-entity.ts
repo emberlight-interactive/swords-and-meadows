@@ -1,7 +1,9 @@
 import { Scene } from 'phaser';
 import { XYTransformable } from '../../shared/entities/x-y-transformable';
+import { Rotatable } from '../../shared/entities/rotatable';
+import { Destroyable } from '../../shared/entities/destroyable';
 
-export class WandEntity implements XYTransformable {
+export class WandEntity implements XYTransformable, Rotatable, Destroyable {
   private container: Phaser.GameObjects.Container;
   private staffSprite: Phaser.GameObjects.Sprite;
 
@@ -25,6 +27,14 @@ export class WandEntity implements XYTransformable {
     this.container.y = value;
   }
 
+  public set angle(value) {
+    this.staffSprite.setAngle(value + 90);
+  }
+
+  public get angle(): number {
+    return this.staffSprite.angle - 90;
+  }
+
   constructor(
     x: number,
     y: number,
@@ -32,8 +42,13 @@ export class WandEntity implements XYTransformable {
   ) {
     this.staffSprite = this.scene.add.sprite(0, 0, 'staff');
     this.container = this.scene.add.container(0, 0, this.staffSprite);
+    this.container.depth = 10;
 
     this.x = x;
     this.y = y;
+  }
+
+  public destroy(): void {
+    this.container.destroy();
   }
 }

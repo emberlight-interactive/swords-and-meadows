@@ -10,11 +10,13 @@ import {
 } from '../../shared/network/networked-state/player-networked-state';
 import { Destroyable } from '../../shared/entities/destroyable';
 import { ObjectCollectionBuffer } from '../../shared/util/object-collection-buffer';
-import { followTarget } from '../../shared/util/follow-target';
 import { InputHandler } from '../../shared/entities/input-handler';
+import { Rotatable } from '../../shared/entities/rotatable';
 
-class DirectionalInputHandler implements InputHandler<IPlayerInput> {
-  private cursorKeys!: Phaser.Types.Input.Keyboard.CursorKeys | undefined;
+type Key = Phaser.Input.Keyboard.Key;
+
+export class PlayerInputHandler implements InputHandler<IPlayerInput> {
+  private keys!: { W: Key; A: Key; S: Key; D: Key };
 
   private playerInput: IPlayerInput = {
     left: false,
@@ -22,12 +24,22 @@ class DirectionalInputHandler implements InputHandler<IPlayerInput> {
     up: false,
     down: false,
     tick: 0,
+    relativeMouseAngle: 0,
   };
 
   private playerInputBuffer = new ObjectCollectionBuffer<IPlayerInput>();
 
-  constructor(private scene: Scene) {
-    this.cursorKeys = this.scene.input.keyboard?.createCursorKeys();
+  constructor(
+    private scene: Scene,
+    private relativeMouseTarget: XYTransformable,
+    private keepInputHistory = true
+  ) {
+    this.keys = {
+      W: this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+      A: this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+      S: this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+      D: this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+    };
   }
 
   public getBuffer() {
@@ -35,13 +47,22 @@ class DirectionalInputHandler implements InputHandler<IPlayerInput> {
   }
 
   public updateCurrentInput(currentTick: number): IPlayerInput {
-    this.playerInput.left = this.cursorKeys?.left.isDown || false;
-    this.playerInput.right = this.cursorKeys?.right.isDown || false;
-    this.playerInput.up = this.cursorKeys?.up.isDown || false;
-    this.playerInput.down = this.cursorKeys?.down.isDown || false;
+    this.playerInput.left = this.keys.A.isDown;
+    this.playerInput.right = this.keys.D.isDown;
+    this.playerInput.up = this.keys.W.isDown;
+    this.playerInput.down = this.keys.S.isDown;
+
+    const dx =
+      this.scene.game.input.activePointer.x - this.relativeMouseTarget.x;
+    const dy =
+      this.scene.game.input.activePointer.y - this.relativeMouseTarget.y;
+
+    this.playerInput.relativeMouseAngle =
+      (360 / (2 * Math.PI)) * Math.atan2(dy, dx);
+
     this.playerInput.tick = currentTick;
 
-    this.playerInputBuffer.add(this.playerInput);
+    if (this.keepInputHistory) this.playerInputBuffer.add(this.playerInput);
 
     return this.playerInput;
   }
@@ -55,7 +76,7 @@ export class PlayerBroadcasterEntity
   implements NetworkBroadcastEntity<PlayerNetworkedStateBundle>
 {
   public readonly networkCommKey = NetworkCommKey.PlayerState;
-  private directionalInputHandler: InputHandler<IPlayerInput>;
+  private playerInputHandler: InputHandler<IPlayerInput>;
 
   private state: IPlayerState = ((parentThis: PlayerBroadcasterEntity) => {
     return new (class {
@@ -72,37 +93,44 @@ export class PlayerBroadcasterEntity
         parentThis.playerEntity.y = value;
       }
       public tick = 0;
+      public _relativeMouseAngle = 0;
+      public set relativeMouseAngle(value: number) {
+        this._relativeMouseAngle = value;
+        parentThis.playerWand.angle = value;
+      }
+      public get relativeMouseAngle() {
+        return this._relativeMouseAngle;
+      }
     })();
   })(this);
 
   constructor(
     private scene: Scene,
     private playerEntity: XYTransformable & Destroyable,
-    private playerWand: XYTransformable,
-    directionalInputHandler?: InputHandler<IPlayerInput>
+    private playerWand: XYTransformable & Rotatable & Destroyable,
+    playerInputHandler?: InputHandler<IPlayerInput>
   ) {
-    this.directionalInputHandler =
-      directionalInputHandler || new DirectionalInputHandler(this.scene);
+    this.playerInputHandler =
+      playerInputHandler || new PlayerInputHandler(this.scene, this.playerWand);
   }
 
   public getCurrentInput(currentTick: number): IPlayerInput {
-    this.directionalInputHandler.updateCurrentInput(currentTick);
-    return this.directionalInputHandler.getCurrentInput();
+    this.playerInputHandler.updateCurrentInput(currentTick);
+    return this.playerInputHandler.getCurrentInput();
   }
 
   public destroy() {
     this.playerEntity.destroy();
+    this.playerWand.destroy();
   }
 
   public reconcileState(stateRef: IPlayerState) {
     let historicalInput: IPlayerInput | undefined;
 
-    while (
-      (historicalInput = this.directionalInputHandler.getBuffer().shift())
-    ) {
+    while ((historicalInput = this.playerInputHandler.getBuffer().shift())) {
       if (stateRef.tick === historicalInput.tick) {
         Object.assign(this.state, stateRef);
-        for (const v of this.directionalInputHandler.getBuffer().iterable()) {
+        for (const v of this.playerInputHandler.getBuffer().iterable()) {
           playerStateModification(v, this.state);
         }
         break;
@@ -112,9 +140,8 @@ export class PlayerBroadcasterEntity
 
   public tick() {
     playerStateModification(
-      this.directionalInputHandler.getCurrentInput(),
+      this.playerInputHandler.getCurrentInput(),
       this.state
     );
-    followTarget(this.playerWand, this.playerEntity, -13, 2);
   }
 }
