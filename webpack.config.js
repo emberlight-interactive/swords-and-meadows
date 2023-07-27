@@ -5,7 +5,6 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = /** @type { import('webpack').Configuration } */ ({
   entry: {
@@ -25,7 +24,7 @@ module.exports = /** @type { import('webpack').Configuration } */ ({
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name]-[contenthash].bundle.js',
-    assetModuleFilename: 'asset-packs/[name]-[hash][ext][query]',
+    assetModuleFilename: 'assets/[name]-[hash][ext][query]',
   },
   module: {
     rules: [
@@ -38,6 +37,10 @@ module.exports = /** @type { import('webpack').Configuration } */ ({
         test: /\.json/,
         type: 'asset/resource',
         exclude: /node_modules/,
+      },
+      {
+        test: /\.(png|jpe?g|gif|jp2|webp)$/,
+        type: 'asset/resource'
       },
       process.env.NODE_ENV === 'production'
         ? {
@@ -97,13 +100,6 @@ module.exports = /** @type { import('webpack').Configuration } */ ({
       minify: false,
     }),
     new CleanWebpackPlugin(),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'static',
-        },
-      ],
-    }),
     new webpack.HotModuleReplacementPlugin(),
   ],
 });

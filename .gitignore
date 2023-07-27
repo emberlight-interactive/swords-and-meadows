@@ -1,5 +1,6 @@
 # compiled output
 /dist
+/dist-website
 /public/dist
 /tmp
 /out-tsc
@@ -41,3 +42,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+.parcel-cache/
+
+.firebase
