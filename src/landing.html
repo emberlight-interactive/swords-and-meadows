@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Swords & Meadows: Online</title>
+  <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background-color: #71aa43;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .header-video-playback {
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      object-fit: cover;
+    }
+    .hidden {
+      display: none;
+    }
+    .hero-header {
+      background: -webkit-gradient(linear,left top,left bottom,from(rgba(0,0,0,.4)),to(rgba(0,0,0,.64)));
+      background: linear-gradient(180deg,rgba(0,0,0,.4),rgba(0,0,0,.64));
+      bottom: 0;
+      content: "";
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 2;
+    }
+    form {
+        background: rgb(246, 244, 235, 0.5);
+        padding: 1.3rem;
+    }
+    input {
+        width: 100%;
+        background: #f5f5f5;
+        border: 0;
+        padding: 20px;
+        margin-bottom: 10px;
+        border: 1px solid #eee;
+        border-radius: 0px;
+    }
+    .btn2 {
+        width: 100%;
+        padding: 12px;
+        border: 0;
+        background: #4682A9;
+        font-size: 1.1em;
+        color: #fff;
+        text-shadow: 1px 1px 0px rgba(0, 0, 0, .4);
+        box-shadow: 0px 3px 0px #749BC2;
+        margin-top: .3rem;
+        cursor: pointer;
+    }
+    .btn2:hover {
+        color: #fff;
+        background: #91C8E4;
+        border-color: #91C8E4;
+    }
+    .form-control {
+        box-sizing: border-box;
+        display: block;
+        width: 100%;
+        padding: .5rem .75rem;
+        font-size: 1rem;
+        line-height: 1.25;
+        color: #55595c;
+        background-color: #f9f9f9;
+        background-image: none;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 0px;
+    }
+    .form-control:focus {
+        border-width: 1px;
+        border-color: #91C8E4;
+        box-shadow: inset 0 1px 1px rgba(45, 45, 45, 0.07), 0 0 8px rgba(129, 129, 129, 0.6);
+    }
+    *,*:focus,*:hover{
+        outline:none;
+    }
+    .button {
+      width: 75px;
+      height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row;
+      border: 3px solid rgb(246, 244, 235, 0.5);
+    }
+    .button--play {
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .button--play .button__shape {
+      width: 12.5px;
+      height: 37.5px;
+      background: rgb(246, 244, 235, 0.5);
+      transition: -webkit-clip-path 0.1s ease-in-out, clip-path 0.1s ease-in-out, transform 0.1s ease-in-out;
+    }
+    .button--play .button__shape--one {
+      -webkit-clip-path: polygon(0 0, 100% 25%, 100% 75%, 0% 100%);
+      clip-path: polygon(0 0, 100% 25%, 100% 75%, 0% 100%);
+      transform: translateX(5px);
+    }
+    .button--play .button__shape--two {
+      -webkit-clip-path: polygon(0 25%, 100% 50%, 100% 50%, 0 75%);
+      clip-path: polygon(0 25%, 100% 50%, 100% 50%, 0 75%);
+      transform: translateX(4.65px);
+    }
+    .button--play.button--active .button__shape--one {
+      -webkit-clip-path: polygon(0 15%, 50% 15%, 50% 85%, 0% 85%);
+      clip-path: polygon(0 15%, 50% 15%, 50% 85%, 0% 85%);
+      transform: translateX(0px);
+    }
+    .button--play.button--active .button__shape--two {
+      -webkit-clip-path: polygon(50% 15%, 100% 15%, 100% 85%, 50% 85%);
+      clip-path: polygon(50% 15%, 100% 15%, 100% 85%, 50% 85%);
+      transform: translateX(0px);
+    }
+    .overlay-container {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      left:50%;
+      top:50%;
+      transform: translate(-50%, -55%);
+      height: 100vh;
+      width: 100%;
+      max-width: 525px;
+      z-index: 3;
+    }
+    .play {
+      display: inline-block;
+      margin: 0 auto;
+    }
+
+    .play.button--active * {
+      visibility: hidden;
+    }
+
+    .play.button--active:active * {
+      visibility: visible;
+    }
+
+    @media (hover: hover) {
+      .play.button--active:hover * {
+        visibility: visible;
+      }
+    }
+    .logo-box {
+      padding: 20px;
+    }
+    .logo {
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .mailing-form {
+      margin: 0;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .mail-form-container {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 430px;
+      padding: 0 20px;
+    }
+    .selling-points{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+    .selling-points span {
+      display: inline-block;
+      padding: 5px;
+      /* font-weight: bold; */
+      text-decoration: underline;
+      color: #f6f4eb;
+      cursor: pointer;
+    }
+
+    .selling-points span:active {
+      color: rgb(246, 244, 235, 0.5);
+    }
+
+    @media (hover: hover) {
+      .selling-points span:hover {
+        color: rgb(246, 244, 235, 0.5);
+      }
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 6;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-content {
+      background-color: #f6f4eb;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      max-width: 700px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media only screen and (max-width: 800px) {
+      .popup-content {
+        width: 75%;
+      }
+
+      .overlay-container {
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    @media only screen and (max-width: 600px) {
+      .popup-content {
+        width: 90%;
+      }
+    }
+
+    #sib-container input:-ms-input-placeholder {
+      text-align: left;
+      font-family: "Helvetica", sans-serif;
+      color: #c0ccda;
+    }
+
+    #sib-container input::placeholder {
+      text-align: left;
+      font-family: "Helvetica", sans-serif;
+      color: #c0ccda;
+    }
+
+    #sib-container textarea::placeholder {
+      text-align: left;
+      font-family: "Helvetica", sans-serif;
+      color: #c0ccda;
+    }
+
+    .grecaptcha-badge {
+      z-index: 5;
+      display:block !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- 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 -->
+    <!-- Make these videos a background, scroll hides, end has transparent window to show the video still running -->
+    <video id="video" preload="none" class="header-video-playback" muted loop disableRemotePlayback>
+      <source id="source-slow-mobile" src="./shared/media/mage-combat-mobile-480-30.webm" type="video/webm">
+      <source id="source-full-mobile" src="./shared/media/smo-mobile-720-30.webm" type="video/webm">
+      <source id="source-small-desktop" src="./shared/media/720-smo.webm" type="video/webm">
+      <source id="source-medium-desktop" src="./shared/media/1080-smo.webm" type="video/webm">
+      <source id="source-large-desktop" src="./shared/media/1440-smo.webm" type="video/webm">
+    </video>
+
+    <div class="hero-header"></div>
+
+    <div class="overlay-container">
+      <div class="logo-box">
+        <img src="./shared/media/logo.png" class="logo">
+        <div class="selling-points">
+          <span onclick="openPopup('singleServer')">Single Server Browser-based MMO.</span>
+          <span onclick="openPopup('openWorld')">Open World.</span>
+          <span onclick="openPopup('mageCombat')">Mage Combat.</span>
+          <span onclick="openPopup('societydevelopment')">Society Development.</span>
+          <span onclick="openPopup('armybuilding')">Army Building.</span>
+          <span onclick="openPopup('empireConquest')">Empire Conquest.</span>
+        </div>
+      </div>
+
+      <div class="play-button">
+        <div class="play" onclick="toggleVideo()">
+          <div class="button button--play">
+            <div class="button__shape button__shape--one"></div>
+            <div class="button__shape button__shape--two"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sib-form mail-form-container">
+        <div id="sib-form-container" class="sib-form-container">
+          <div id="error-message" class="sib-form-message-panel" style="font-size:16px; text-align:left; color:#661d1d; background-color:#ffeded; border-color:#ff4949;max-width:430px;">
+            <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
+              <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon">
+                <path d="M256 40c118.621 0 216 96.075 216 216 0 119.291-96.61 216-216 216-119.244 0-216-96.562-216-216 0-119.203 96.602-216 216-216m0-32C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm-11.49 120h22.979c6.823 0 12.274 5.682 11.99 12.5l-7 168c-.268 6.428-5.556 11.5-11.99 11.5h-8.979c-6.433 0-11.722-5.073-11.99-11.5l-7-168c-.283-6.818 5.167-12.5 11.99-12.5zM256 340c-15.464 0-28 12.536-28 28s12.536 28 28 28 28-12.536 28-28-12.536-28-28-28z" />
+              </svg>
+              <span class="sib-form-message-panel__inner-text">
+                                Your subscription could not be saved. Please try again.
+                            </span>
+            </div>
+          </div>
+          <div></div>
+          <div id="success-message" class="sib-form-message-panel" style="font-size:16px; text-align:left; color:#085229; background-color:#e7faf0; border-color:#13ce66;max-width:430px;">
+            <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
+              <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon">
+                <path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 464c-118.664 0-216-96.055-216-216 0-118.663 96.055-216 216-216 118.664 0 216 96.055 216 216 0 118.663-96.055 216-216 216zm141.63-274.961L217.15 376.071c-4.705 4.667-12.303 4.637-16.97-.068l-85.878-86.572c-4.667-4.705-4.637-12.303.068-16.97l8.52-8.451c4.705-4.667 12.303-4.637 16.97.068l68.976 69.533 163.441-162.13c4.705-4.667 12.303-4.637 16.97.068l8.451 8.52c4.668 4.705 4.637 12.303-.068 16.97z" />
+              </svg>
+              <span class="sib-form-message-panel__inner-text">
+                                Your subscription has been successful.
+                            </span>
+            </div>
+          </div>
+          <div></div>
+          <div id="sib-container" class="sib-container--medium sib-container--horizontal" style="text-align:center; background: none; padding: 0;">
+            <form id="sib-form" class="mailing-form" method="POST" action="https://4b09c228.sibforms.com/serve/MUIFAL54RjPW9Ig8QxEvgw4M37UA5hIiJXPNPbsRfLB6EjnRmFD-xCHOTHn1m2cq-b0WXQWWuf6a9Ph99N6Biu9ssaWpJmbqGdrLtRGR257kwzp9lQWkcfrix0r-eKJZEhI1cGf-xQP6emmeipaSkyNel00pq3MoCcw5XtEF5GkjSI2VbIV1OcfzYMzcX9Bn8ME7PpdnsR5Vi2Ln" data-type="subscription">
+              <div>
+                <div class="sib-input sib-form-block" style="padding: 0;">
+                  <div class="form__entry entry_block">
+                    <div class="form__label-row form__label-row--horizontal" style="margin: 0;">
+
+                      <div class="entry__field" style="border-radius: 0px; margin: 0">
+                        <input class="input form-control" type="text" id="EMAIL" name="EMAIL" autocomplete="off" placeholder="Email" data-required="true" required />
+                      </div>
+                    </div>
+
+                    <label class="entry__error entry__error--primary" style="font-size:16px; text-align:left; color:red; display: none;">
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div style="padding: 8px 0 0 0;">
+                <div class="sib-form-block" style="text-align: center; padding: 0;">
+                  <button class="btn2 sib-form-block__button-with-loader" form="sib-form" type="submit">
+                    <svg class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon" viewBox="0 0 512 512">
+                      <path d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z" />
+                    </svg>
+                    Join Waiting List
+                  </button>
+                </div>
+              </div>
+
+              <input type="text" name="email_address_check" value="" class="input--hidden">
+              <input type="hidden" name="locale" value="en">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+<div class="g-recaptcha" data-sitekey="6Ld_TlknAAAAAA0gDWXN7M-6BJd9QQb8syqH3I-C" data-callback="invisibleCaptchaCallback" data-size="invisible" onclick="executeCaptcha"></div>
+
+    <div id="popup" class="popup">
+      <div class="popup-content">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <h2 id="popUpTitle"></h2>
+        <p id="popUpDescription"></p>
+      </div>
+    </div>
+
+    <script>
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      var canSuccInternetUsage = (function () {
+        if ('connection' in navigator) {
+          return !navigator.connection.saveData;
+        } else {
+          return false;
+        }
+      })();
+
+      var fullMobileExperience = isMobile && canSuccInternetUsage; // 720-30fps - all loop, all video
+      var partialMobileExperience = isMobile && !canSuccInternetUsage; // 480-15fps one loop, all im  ages
+
+      var videoSourceIds = [
+        'source-slow-mobile',
+        'source-full-mobile',
+        'source-small-desktop',
+        'source-medium-desktop',
+        'source-large-desktop',
+      ];
+
+      if (partialMobileExperience) {
+        useVideoSource('source-slow-mobile');
+      } else if (fullMobileExperience) {
+        useVideoSource('source-full-mobile');
+      } else {
+        var sourceToUse = (function () {
+            if (screen.width > 1920) {
+              return 'source-large-desktop';
+            } else if (screen.width > 1280) {
+              return 'source-medium-desktop';
+            } else {
+              return 'source-small-desktop';
+            }
+        })();
+
+        useVideoSource(sourceToUse);
+      }
+
+      function useVideoSource(id) {
+        videoSourceIds.forEach((function (v) {
+          if (v !== id) {
+            document.getElementById(v).remove();
+          }
+        }));
+      }
+
+      var video = document.getElementById('video');
+      video.load();
+
+      function toggleVideo() {
+        video.paused ? video.play() : video.pause();
+        const playButton = document.querySelector('.button--play');
+        const playButtonContainer = document.querySelector('.play');
+        playButton.classList.toggle('button--active');
+        playButtonContainer.classList.toggle('button--active');
+      }
+
+      var content = {
+        singleServer: {
+          title: "Single Server Browser-based MMO",
+          description: "Join instantly into the world with no account and seamlessly connect with your friends using simple shareable links. Swords & Meadows: Online is a cutting-edge browser-based MMO that breaks down barriers to entry, allowing you to jump straight into the action without any hassle. Experience a massive shared universe where all game progress and activities are centralized to one server, meaning that every action you take impacts the entire player community. With web and database technology ensuring scalability, prepare for near-unlimited concurrent players in a world brimming with life and excitement."
+        },
+        openWorld: {
+          title: "Open World",
+          description: "Welcome to a realm of boundless opportunities and untamed landscapes! In Swords & Meadows: Online, you have the freedom to choose your own path. Compete for rare and abundant resources near the origin of the world, where risk and rewards await at every turn. Alternatively, journey to far-off destinations to cultivate your society in peace, away from the hustle and bustle of central regions. Explore a vast open procedural world where each corner holds secrets to be uncovered, resources to be discovered, and remnants of player-built villages, both old and new."
+        },
+        mageCombat: {
+          title: "Mage Combat",
+          description: "Unleash the power of mana and immerse yourself in the art of combat sorcery! Gather mana to fuel your deadly spells and create your unique combinations of attack and defense. But remember, with great power comes great cost, as casting powerful spells depletes your mana. Seek out hidden scroll parts scattered throughout the world to expand your repertoire of spells, unlocking new powers and elements to dominate the battlefield with."
+        },
+        societydevelopment: {
+          title: "Society Development",
+          description: "Forge your path to greatness by building and strengthening your society! Venture into the farthest reaches of the world to find, capture, and save villagers, who will become valuable members of your thriving community. Gather essential building resources to expand your town and mark your territory with formidable defenses, fending off any who dare to challenge your might. Building strong relationships with your villagers through thoughtful gifting will elevate your status, ensuring the loyalty and dedication of your people."
+        },
+        armybuilding: {
+          title: "Army Building",
+          description: "No hero stands alone in Swords & Meadows: Online! Once you've gained popularity among your people, seek out those willing to join you on daring quests and perilous adventures. Explore the world, scavenge resources, and invest in funding the production of top-tier weapons and armor for your loyal followers. As your army grows, so does your influence and power in the land."
+        },
+        empireConquest: {
+          title: "Empire Conquest",
+          description: "Prepare for intense competition as you vie for resources, territory, and status among the vibrant community of Swords & Meadows: Online. Forge alliances with like-minded players and make enemies of those who stand in your way. Conquer rival players' villages, pillage their towns, and raze their defenses to claim their resources and villagers as your own. Rise to the top and leave your mark as a true conqueror of the realm!"
+        }
+      };
+
+      function openPopup(contentKey) {
+        document.getElementById("popup").style.display = "block";
+        document.getElementById("popUpTitle").innerText = content[contentKey].title;
+        document.getElementById("popUpDescription").innerText = content[contentKey].description;
+      }
+
+      function closePopup() {
+        document.getElementById("popup").style.display = "none";
+      }
+
+      window.onclick = function(event) {
+        var popup = document.getElementById("popup");
+        if (event.target === popup) {
+          popup.style.display = "none";
+        }
+      };
+    </script>
+
+    <script>
+      window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';
+      window.LOCALE = 'en';
+      window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+      window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank. ";
+      window.GENERIC_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+
+      window.translation = {
+        common: {
+          selectedList: '{quantity} list selected',
+          selectedLists: '{quantity} lists selected'
+        }
+      };
+
+      var AUTOHIDE = Boolean(0);
+    </script>
+    <script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?hl=en"></script>
+  </body>
+</html>

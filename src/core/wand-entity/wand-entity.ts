@@ -2,13 +2,14 @@ import { Scene } from 'phaser';
 import { XYTransformable } from '../../shared/entities/x-y-transformable';
 import { Rotatable } from '../../shared/entities/rotatable';
 import { Destroyable } from '../../shared/entities/destroyable';
+import staff from '../../shared/assets/staff.png';
 
 export class WandEntity implements XYTransformable, Rotatable, Destroyable {
   private container: Phaser.GameObjects.Container;
   private staffSprite: Phaser.GameObjects.Sprite;
 
   public static preload(load: Phaser.Loader.LoaderPlugin) {
-    load.image('staff', 'assets/staff.png');
+    load.image('staff', staff);
   }
 
   public get x() {

@@ -1,13 +1,14 @@
 import { Scene } from 'phaser';
 import { XYTransformable } from '~/shared/entities/x-y-transformable';
 import { Destroyable } from '~/shared/entities/destroyable';
+import greyWizard from '../../shared/assets/grey-wizard.png';
 
 export class PlayerEntity implements XYTransformable, Destroyable {
   private player: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
   private anchorOneOffset = { x: -13, y: 2 };
 
   public static preload(load: Phaser.Loader.LoaderPlugin) {
-    load.image('player', 'assets/grey-wizard.png');
+    load.image('player', greyWizard);
   }
 
   public get x() {
