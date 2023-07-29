@@ -10,6 +10,7 @@
       margin: 0;
       background-color: #71aa43;
       overflow: hidden;
+      overflow-y: scroll;
       font-family: Arial, Helvetica, sans-serif;
     }
     .header-video-playback {
@@ -162,6 +163,7 @@
     .logo {
       box-sizing: border-box;
       width: 100%;
+      padding: 40px 0;
     }
     .mailing-form {
       margin: 0;
@@ -262,8 +264,8 @@
     }
 
     .grecaptcha-badge {
-      z-index: 5;
-      display:block !important;
+      visibility: hidden;
+      width:0 !important;
     }
   </style>
 </head>
@@ -282,7 +284,7 @@
 
     <div class="overlay-container">
       <div class="logo-box">
-        <img src="./shared/media/logo.png" class="logo">
+        <img src="./shared/media/logo-scuffed.png" class="logo">
         <div class="selling-points">
           <span onclick="openPopup('singleServer')">Single Server Browser-based MMO.</span>
           <span onclick="openPopup('openWorld')">Open World.</span>
@@ -334,7 +336,7 @@
                     <div class="form__label-row form__label-row--horizontal" style="margin: 0;">
 
                       <div class="entry__field" style="border-radius: 0px; margin: 0">
-                        <input class="input form-control" type="text" id="EMAIL" name="EMAIL" autocomplete="off" placeholder="Email" data-required="true" required />
+                        <input class="input form-control" type="text" id="EMAIL" name="EMAIL" autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Email" data-required="true" required />
                       </div>
                     </div>
 
@@ -352,7 +354,9 @@
                     Join Waiting List
                   </button>
                 </div>
+                <span style="color: rgb(82, 82, 82); font-size: 10px;">This site is protected by reCAPTCHA and the Google <a style="color: rgb(45, 45, 147);" href="https://policies.google.com/privacy">Privacy Policy</a> and <a style="color: rgb(45, 45, 147);" href="https://policies.google.com/terms">Terms of Service</a> apply.</span>
               </div>
+              <div class="g-recaptcha" data-sitekey="6Ld_TlknAAAAAA0gDWXN7M-6BJd9QQb8syqH3I-C" data-callback="invisibleCaptchaCallback" data-size="invisible" onclick="executeCaptcha"></div>
 
               <input type="text" name="email_address_check" value="" class="input--hidden">
               <input type="hidden" name="locale" value="en">
@@ -364,7 +368,7 @@
 
 
 
-<div class="g-recaptcha" data-sitekey="6Ld_TlknAAAAAA0gDWXN7M-6BJd9QQb8syqH3I-C" data-callback="invisibleCaptchaCallback" data-size="invisible" onclick="executeCaptcha"></div>
+
 
     <div id="popup" class="popup">
       <div class="popup-content">
@@ -443,7 +447,7 @@
         },
         mageCombat: {
           title: "Mage Combat",
-          description: "Unleash the power of mana and immerse yourself in the art of combat sorcery! Gather mana to fuel your deadly spells and create your unique combinations of attack and defense. But remember, with great power comes great cost, as casting powerful spells depletes your mana. Seek out hidden scroll parts scattered throughout the world to expand your repertoire of spells, unlocking new powers and elements to dominate the battlefield with."
+          description: "Unleash the power of magic and immerse yourself in the art of combat sorcery! Gather magic to fuel your deadly spells and create your unique combinations of attack and defense. But remember, with great power comes great cost, as casting powerful spells depletes your magic. Seek out hidden scroll parts scattered throughout the world to expand your repertoire of spells, unlocking new powers and elements to dominate the battlefield with."
         },
         societydevelopment: {
           title: "Society Development",

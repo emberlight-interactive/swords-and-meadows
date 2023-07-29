@@ -46,3 +46,4 @@ Thumbs.db
 .parcel-cache/
 
 .firebase
+firebase-debug.log
