@@ -4,6 +4,7 @@
     "server": "tsx watch ./src/server.ts",
     "start": "webpack serve --mode=development --stats-error-details --node-env development",
     "website": "parcel serve ./src/landing.html --dist-dir ./dist-website",
+    "build-website": "parcel build ./src/landing.html --dist-dir ./dist-website --no-optimize",
     "build": "webpack --mode=production --node-env production && phaser-asset-pack-hashing -r dist",
     "lint": "eslint . --ext .ts"
   },
