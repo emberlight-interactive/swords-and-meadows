@@ -45,7 +45,7 @@ flowchart TD
     B -->|From defeated armies| C
     B -->|From defeated settlements| C
     B -->|From base post storage| C
-    B --> |Gather scroll parts from ruins| CC[Gamble or craft new spells]
+    B --> |Gather scroll parts from ruins| CC[Craft new spells]
     B --> EE[Villagers]
     EE -->|from deserter camp| I
     EE -->|from women from enemy camps| I
@@ -53,24 +53,23 @@ flowchart TD
     CC -->|PvP fights| J
     B --> |Gather special parts from ruins| DD[Use with raw resources to craft armoury]
     DD --> I
-    C --> D[Base Post]
     C --> E[Border and Defenses of settlement]
+    C --> EEE[Housing and Storage construction]
     C --> F[Maintenance]
-    C --> G[Base Post in ally base]
-    C --> GG[Personal Magic Reserve]
-    C --> H
-    G --> H[Develop status in settlement]
-    D --> H
-    H -->|with your base post armoury| I[Build army]
+    C --> G[Base Post]
+    C --> GG[Storage]
+    C --> D[Base Post in base for ally]
+    G --> I[Build army]
     I -->|Field battles| J[Defeat enemy players]
     I -->|Settlement Sieges| J
-    J --> K[Rule the server - short term status]
-    J --> L[Gain visible accolades - long term status]
+    J --> K[Rule the server]
 ```
 
 ### Spawn
 
 - Upon spawn you are granted full health and a token amount of magic
+- If using friend link use graph to find nearest adjacent free position to spawn player
+- Player entity will remain in place and grey out when signed out. Can be killed and have items stolen
 
 ### Resources
 
@@ -84,6 +83,7 @@ flowchart TD
 |Berries (Food variant)|Berry Bushes|Villager Maintenance|
 |Wheat (Food variant)|Wheat plants|Villager Maintenance|
 |Meat (Food variant)|Idle Deer|Villager Maintenance|
+|Leather|Idle Deer|Early Armour|
 |Bind|Ruins (Chest)|Early, Mid, Late weapons|
 |Glade Handle (Short sword)|Ruins (Chest)|Light Early, Weak mid Swords [Lighter, lower damage]|
 |Fibre Wood Handle (Short sword)|Ruins (Chest)|Light Early, Mid, Late (weak) Swords [Lighter, lower damage]|
@@ -101,7 +101,8 @@ flowchart TD
 |Electric variant spell book|Crafting, Ruins (Chest)|Equip for battle|
 |Fire variant spell book|Crafting, Ruins (Chest)|Equip for battle|
 |Force variant spell book|Crafting, Ruins (Chest)|Equip for battle|
-|Villager (Male)|Fleeing Armies, sieged settlements, deserter camps|Fund armies|
+|Villager (Male)|Destroyed Armies, sieged settlements, deserter camps|Fund armies|
+|Villager (Women)|Sieged settlements, deserter camps|Makes Babies|
 
 ### Resource Sources
 #### Ruins
@@ -110,7 +111,7 @@ Ruins will have "specialties" in terms of spell types and weapon part spawn chan
 
 Defense spell book spawns are more common than offensive spell book spawns
 
-### Crafting
+### Crafting & Construction
 
 #### Spell Books
 
@@ -146,14 +147,81 @@ Tree of spells of the three elements, advanced defense spells should be readily 
 |Basic Radius Force Attack|-|
 |Strong Radius Force Attack|-|
 
-#### Armour and Weapons
+#### Weapons
+
 |Item|Recipe|
 |---|---|
+|Ancestor Spear|Wood + Metal|
+|Steel Reed Spear|Oak Handle + Wood + Rare metal + Bind|
+|Glade Short Sword|Glade Handle + Metal + Bind|
+|Glade Sword|Glade Handle + Metal + Bind|
+|Katana|Fibre Wood Handle + Metal + Bind|
+|Fine Katana|Fibre Wood Handle + Rare metal + Bind|
+|Laido Sword|Feather Metal Handle + Metal + Bind|
+|Masterwork Laido Sword|Feather Metal Handle + Rare metal + Bind|
+|Oak Sword|Oak Handle + Metal + Bind|
+|Oak Long Sword|Oak Handle + Metal + Bind|
+|Gladius|Iron Handle + Metal + Bind|
+|Fine Gladius|Iron Handle + Rare metal + Bind|
+|Broadsword|Dense Spine Handle + Metal + Bind|
+|Weighted Broadsword|Dense Spine Handle + Rare metal + Bind|
 
+#### Shields
 
-### Status increase
+|Item|Recipe|
+|---|---|
+|Weaved Shield|Wood|
+|Wooden Round Shield|Thicc Leather Boss + Wood + Bind|
+|Decorated Round Shield|Leather Boss + Wood + Metal + Bind|
+|Reinforced Shield|Metal Boss + Metal + Bind|
+|Knox Shield|Dense Metal Boss + Rare Metal + Bind|
 
-When a player gains maintenance resources for a settlement they gain status in that settlement. Provides balancing effect whereby only players that contribute to settlement can take out villagers to fight. Player with higher status can decide to leave other units for teammates
+#### Armour
+
+|Item|Recipe|
+|---|---|
+|Leather Armour|Leather|
+|Decorated Leather Armour|Leather + Metal|
+|Metal Armour|Metal + Bind|
+|Plate Armour|Rare metal + metal + bind|
+
+#### Walls
+
+|Construction|Recipe|
+|---|---|
+|Wooden Palisade|Wood|
+|Wooden Gate|Wood|
+|Stone Wall|Stone|
+|Stone Gate|Stone + Wood|
+|Metal Wall|Metal|
+|Metal Gate|Metal|
+
+#### Towers
+
+|Construction|Recipe|
+|---|---|
+|Watch Tower|Wood|
+|Reinforced Watch Tower|Wood + Metal|
+|Outpost|Metal|
+|Tower|Metal + Rare metal|
+
+#### Platform
+
+Wood + Metal
+
+#### Buildings
+
+|Construction|Recipe|
+|---|---|
+|Base Post|Wood + Metal|
+|House|Wood|
+|Storage|Wood + Metal|
+
+### Storage
+
+Resources and villagers can be deposited in base post to be automatically proliferated through storages and houses, or they can be directly stored in select buildings. Access to storage can be done through base posts which will be sorted. Only base owners and teammates can access storage (prevent placing storage across the map for trading, requires invading army to destroy buildings).
+
+Storage capacity deficit for resources and villagers will result in decay and desertion
 
 ### Armies
 
@@ -168,6 +236,12 @@ WHen a player engages an enemy army it needs to be a certain distance from a fri
 
 Players can damage enemy armies (banner bearers) at great magic cost
 
+Army will have player name
+
+Armies will automatically attack other armies that attack it. The player will need to manually target an army unit with another army unit
+
+`1, 2, 3` to select army unit `F1: Go to place, F2: Follow me, F3: Attack` If no army unit is selected then all armies assume command
+
 ### World
 
 Some terrain sprites allow player entities to be completely hidden (Name, health, etc) allowing for ambush and evasion opportunities
@@ -178,12 +252,17 @@ Procedural generation simply outlines where regions and resource points will be 
 
 The 3 craftable parts of a settlement include the walls, towers and player platforms that allow for players to shoot over adjacent walls. Walls are sections "3 units thick" and are the target for a single army unit or player mage attack.
 
-Player has to define border to allow village to develop
+Houses are crafted to store villagers, storage to store everything else.
+
+Base posts have an construction range of +-150 units. Nothing can be built in this range or within the range of 20 units from a building in this zone
 
 ### Sieges
 
 A player can theoretically attack a settlement by themselves but at a massive magic cost. They would need to spend magic defending against towers and assaulting the relevant structures (Walls, annoying towers, player base posts). The benefits of an army is that they have infinite assault capabilities while a mage needs to put themselves at risk by harnessing massive magic ability.
 
+When players are offline all male villagers with cap on women (25% of women) will barricade themselves across the base posts in a 100|70,30|60,20,10| Ratio with full equipment and act as stationary armies with the building health acting as a health increase for that army
+
+Buildings can be destroyed to steal women
 
 ### Spells
 
@@ -197,10 +276,24 @@ Defense against the different types of magic can be used by any element but beco
 
 Direct attacks deal more damage than direct + radius and radius spells
 
+Defense spells can last for a period of time, allowing the player to defend then pop off a collection of attacks
 
 ### Equipping Spell Books
 
 Players equip new spells at the node of mouse click combinations. UI IDEA -> mouse pic with sides lighting up every time node is selected.
+
+### Health
+
+- All mages will have fixed health, health will naturally regenerate after a certain duration from last damage
+- No maintenance resources degrades building health until 0
+- If maintenance resources exist structures heal overtime
+  - Player can instantly heal structures for a price
+
+### UI
+
+- XY coord indicator
+- "Get shareable link"
+- (Sign in | Claim this account) / Sign out
 
 ### Inequality Problem
 
@@ -222,3 +315,5 @@ Secret sauce for unlimited multiplayer
 - Player constructions to automate generation of some resources (magic)
 - Make player need to complete resource or chest gathering mini games
 - Cloak and staff crafting
+- Accolade system that shows experience or playtime
+- In game chat system
