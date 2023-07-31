@@ -248,6 +248,8 @@ Some terrain sprites allow player entities to be completely hidden (Name, health
 
 Procedural generation simply outlines where regions and resource points will be located, these resources are activated depending on distance from origin and average peak players per week, less players more scarce the resources past the origin
 
+The world will initially be generic. Ruins of different types will create demand for certain regions
+
 ### Settlements
 
 The 3 craftable parts of a settlement include the walls, towers and player platforms that allow for players to shoot over adjacent walls. Walls are sections "3 units thick" and are the target for a single army unit or player mage attack.
