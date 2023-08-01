@@ -136,7 +136,7 @@
       transform: translate(-50%, -55%);
       height: 100vh;
       width: 100%;
-      max-width: 525px;
+      max-width: 650px;
       z-index: 3;
     }
     .play {
@@ -163,7 +163,6 @@
     .logo {
       box-sizing: border-box;
       width: 100%;
-      padding: 40px 0;
     }
     .mailing-form {
       margin: 0;
@@ -189,6 +188,12 @@
       text-decoration: underline;
       color: #f6f4eb;
       cursor: pointer;
+    }
+
+    @media only screen and (max-width: 800px) {
+      .selling-points span {
+        font-size: 14px;
+      }
     }
 
     .selling-points span:active {
@@ -284,7 +289,7 @@
 
     <div class="overlay-container">
       <div class="logo-box">
-        <img src="./shared/media/logo-scuffed.png" class="logo">
+        <img src="./shared/media/logo.png" class="logo">
         <div class="selling-points">
           <span onclick="openPopup('singleServer')">Single Server Browser-based MMO.</span>
           <span onclick="openPopup('openWorld')">Open World.</span>
