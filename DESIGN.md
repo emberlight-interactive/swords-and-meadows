@@ -159,8 +159,8 @@ Tree of spells of the three elements, advanced defense spells should be readily 
 |Fine Katana|Fibre Wood Handle + Rare metal + Bind|
 |Laido Sword|Feather Metal Handle + Metal + Bind|
 |Masterwork Laido Sword|Feather Metal Handle + Rare metal + Bind|
-|Oak Sword|Oak Handle + Metal + Bind|
-|Oak Long Sword|Oak Handle + Metal + Bind|
+|Oak Steel Sword|Oak Handle + Metal + Bind|
+|Oak Steel Long Sword|Oak Handle + Metal + Bind|
 |Gladius|Iron Handle + Metal + Bind|
 |Fine Gladius|Iron Handle + Rare metal + Bind|
 |Broadsword|Dense Spine Handle + Metal + Bind|
@@ -311,6 +311,11 @@ Secret sauce for unlimited multiplayer
 - Parallel process that 1. Understand player network speed, 2. Decides how many entities to network, 3. Runs a calculation every 2-seconds for which state that particular player needs updating (distance based) and will notify the node process to only detect and return changes to state from those entities
 - Sort passive entities (wall/tower health) w\ active entities (players, armies) 
 
+### Monetization
+
+- Freemium with video ads
+- Subscription
+
 ### Road Map ideas
 
 - Armour enhancements
@@ -319,3 +324,139 @@ Secret sauce for unlimited multiplayer
 - Cloak and staff crafting
 - Accolade system that shows experience or playtime
 - In game chat system
+
+## Asset List
+
+|Asset|Specs|Quantity|
+|---|---|---|
+|Wizard Character|[23x41]|8|
+|Staff|[~9x~28]|8|
+|Magic (Blue Flame)|[~16x~16]|1|
+|Magic (Blue Flame) Icon|[~32x~32]|1|
+|Wood|[~16x~16]|1|
+|Wood Icon|[~32x~32]|1|
+|Embedded Stone (In cliff) w\animation|[~26x~26]|1|
+|Stone|[~16x~16]|1|
+|Stone Icon|[~32x~32]|1|
+|Metal Bar|[~16x~16]|1|
+|Metal Bar Icon|[~32x~32]|1|
+|Rare Metal Bar|[~16x~16]|1|
+|Rare Metal Bar Icon|[~32x~32]|1|
+|Metal Ore w\animation|[~26x~26]|1|
+|Berries|[~16x~16]|1|
+|Berries Icon|[~32x~32]|1|
+|Berry Bush w\animation|[~30x~30]|1|
+|Wheat|[~16x~16]|1|
+|Wheat Icon|[~32x~32]|1|
+|Wheat Plant w\animation|[~32x~32]|1|
+|Meat|[~16x~16]|1|
+|Meat Icon|[~32x~32]|1|
+|Leather|[~16x~16]|1|
+|Leather Icon|[~32x~32]|1|
+|Idle Deer w\death animation|[~52x~45]|1|
+|Chest w\animation|[~26x~26]|1|
+|Rope|[~16x~16]|1|
+|Rope Icon|[~32x~32]|1|
+|"Glade" Light Sword Handle|[~16x~12]|1|
+|"Glade" Light Sword Handle Icon|[~32x~24]|1|
+|"Fibre wood" Light Sword Handle|[~16x~12]|1|
+|"Fibre wood" Light Sword Handle Icon|[~32x~24]|1|
+|"Feather metal" Light Sword Handle|[~16x~12]|1|
+|"Feather metal" Light Sword Handle Icon|[~32x~24]|1|
+|"Oak" Heavy Sword Handle|[~16x~12]|1|
+|"Oak" Heavy Sword Handle Icon|[~32x~24]|1|
+|"Iron" Heavy Sword Handle|[~16x~12]|1|
+|"Iron" Heavy Sword Handle Icon|[~32x~24]|1|
+|"Dense spine" Heavy Sword Handle|[~16x~12]|1|
+|"Dense spine" Heavy Sword Handle Icon|[~32x~24]|1|
+|Leather Shield Boss|[~16x~16]|1|
+|Leather Shield Boss Icon|[~32x~32]|1|
+|Metal Shield Boss|[~16x~16]|1|
+|Metal Shield Boss Icon|[~32x~32]|1|
+|Dense Metal Shield Boss|[~16x~16]|1|
+|Dense Metal Shield Boss Icon|[~32x~32]|1|
+|Blank Scroll Parchment|[~16x~16]|1|
+|Blank Scroll Parchment Icon|[~32x~32]|1|
+|"Electric" Scroll Parchment|[~16x~16]|1|
+|"Electric" Scroll Parchment Icon|[~32x~32]|1|
+|"Fire" Scroll Parchment|[~16x~16]|1|
+|"Fire" Scroll Parchment Icon|[~32x~32]|1|
+|"Force" Scroll Parchment|[~16x~16]|1|
+|"Force" Scroll Parchment Icon|[~32x~32]|1|
+|"Electric" Spell Book|[~16x~16]|1|
+|"Electric" Spell Book Icon|[~32x~32]|1|
+|"Fire" Spell Book|[~16x~16]|1|
+|"Fire" Spell Book Icon|[~32x~32]|1|
+|"Force" Spell Book|[~16x~16]|1|
+|"Force" Spell Book Icon|[~32x~32]|1|
+|Villager (Male)|[~17x~28]|1|
+|Villager (Female)|[~17x~28]|1|
+|Basic Fire Defense w\defense animation|[64x64]|1|
+|Medium Fire Defense w\defense animation|[64x64]|1|
+|Strong Fire Defense w\defense animation|[64x64]|1|
+|Basic Direct Fire Attack w\flight animation|[16x16]|1|
+|Strong Direct Fire Attack w\flight animation|[16x16]|1|
+|Basic Direct+Radius Fire Attack|[120x75]|2*|
+|Strong Direct+Radius Fire Attack|[120x75]|2*|
+|Basic Radius Fire Attack|[120x75]|1|
+|Strong Radius Fire Attack|[120x75]|1|
+|Basic Electric Defense w\defense animation|[64x64]|1|
+|Medium Electric Defense w\defense animation|[64x64]|1|
+|Strong Electric Defense w\defense animation|[64x64]|1|
+|Basic Direct Electric Attack w\flight animation|[16x16]|1|
+|Strong Direct Electric Attack w\flight animation|[16x16]|1|
+|Basic Direct+Radius Electric Attack|[120x75]|2*|
+|Strong Direct+Radius Electric Attack|[120x75]|2*|
+|Basic Radius Electric Attack|[120x75]|1|
+|Strong Radius Electric Attack|[120x75]|1|
+|Basic Force Defense w\defense animation|[64x64]|1|
+|Medium Force Defense w\defense animation|[64x64]|1|
+|Strong Force Defense w\defense animation|[64x64]|1|
+|Basic Direct Force Attack w\flight animation|[16x16]|1|
+|Strong Direct Force Attack w\flight animation|[16x16]|1|
+|Basic Direct+Radius Force Attack|[120x75]|2*|
+|Strong Direct+Radius Force Attack|[120x75]|2*|
+|Basic Radius Force Attack|[120x75]|1|
+|Strong Radius Force Attack|[120x75]|1|
+|"Ancestor" Spear|[~9x~28]|1*---|
+|"Steel Reed" Spear|[~9x~28]|1|
+|"Glade Short" Light Sword|[~7x~21]|1|
+|"Glade" Light Sword|[~7x~26]|1|
+|"Katana" light sword|[~7x~26]|1|
+|"Fine Katana" light sword|[~7x~26]|1|
+|"Laido" Light sword|[~7x~26]|1|
+|"Masterwork Laido" light Sword|[~7x~26]|1|
+|"Oak Steel" heavy Sword|[~7x~23]|1|
+|"Oak Steel Long" heavy Sword|[~7x~26]|1|
+|"Gladius" sword|[~7x~21]|1|
+|"Fine Gladius" sword|[~7x~21]|1|
+|Broadsword|[~7x~28]|1|
+|Weighted Broadsword|[~7x~28]|1|
+|Weaved Shield|[~18x~18]|1|
+|Wooden "Leather" Round Shield|[~18x~18]|1|
+|Decorated Round Shield|[~18x~18]|1|
+|Reinforced Shield|[~18x~18]|1|
+|Knox Shield|[~18x~18]|1|
+|Leather Armour|[~17x~15] Fit Villager|1|
+|Leather Helmet|[~18x~18] Fit Villager|1|
+|Decorated Leather Armour|[~17x~15] Fit Villager|1|
+|Decorated Leather Helmet|[~18x~18] Fit Villager|1|
+|Metal Armour|[~17x~15] Fit Villager|1|
+|Metal Helmet|[~18x~18] Fit Villager|1|
+|Plate Armour|[~17x~15] Fit Villager|1|
+|Plate Helmet|[~18x~18] Fit Villager|1|
+|Wooden Palisade|[32x32]|1|
+|Wooden Gate|[96x32]|1|
+|Stone Wall|[32x32]|1|
+|Stone Gate|[96x32]|1|
+|Metal Wall|[32x32]|1|
+|Metal Gate|[96x32]|1|
+|Watch Tower|[32x64]|1|
+|Reinforced Watch Tower|[32x64]|1|
+|Outpost|[32x64]|1|
+|Tower|[32x64]|1|
+|Base Post|[180x270]|1|
+|House|[270x180]|1|
+|Storage|[180x270]|1|
+|Meadow Tile Sheet|Prairie Tile Sheet|1|
+|Township Tile Sheet|Town Tile Sheet|1|
