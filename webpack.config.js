@@ -40,7 +40,7 @@ module.exports = /** @type { import('webpack').Configuration } */ ({
       },
       {
         test: /\.(png|jpe?g|gif|jp2|webp)$/,
-        type: 'asset/resource'
+        type: 'asset/resource',
       },
       process.env.NODE_ENV === 'production'
         ? {
