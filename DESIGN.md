@@ -202,8 +202,8 @@ Tree of spells of the three elements, advanced defense spells should be readily 
 |---|---|
 |Watch Tower|Wood|
 |Reinforced Watch Tower|Wood + Metal|
-|Outpost|Metal|
-|Tower|Metal + Rare metal|
+|Tower|Stone|
+|Reinforced Tower|Stone + Rare metal|
 
 #### Platform
 
@@ -453,8 +453,8 @@ Secret sauce for unlimited multiplayer
 |Metal Gate|[96x32]|1|
 |Watch Tower|[32x64]|1|
 |Reinforced Watch Tower|[32x64]|1|
-|Outpost|[32x64]|1|
 |Tower|[32x64]|1|
+|Reinforced Tower|[32x64]|1|
 |Base Post|[180x270]|1|
 |House|[270x180]|1|
 |Storage|[180x270]|1|
