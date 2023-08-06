@@ -1,0 +1,276 @@
+﻿#Version 3
+#Begin-Auto-Completion 
+AutoCompletion/Scene/Enabled:True
+AutoCompletion/Scene/Items:0
+AutoCompletion/Character/Enabled:True
+AutoCompletion/Character/Items:0
+AutoCompletion/Transition/Enabled:True
+AutoCompletion/Transition/Items:12
+AutoCompletion/Transition/Items/1:BACK TO:
+AutoCompletion/Transition/Items/2:CROSSFADE:
+AutoCompletion/Transition/Items/3:CUT TO:
+AutoCompletion/Transition/Items/4:DISSOLVE TO:
+AutoCompletion/Transition/Items/5:FADE IN:
+AutoCompletion/Transition/Items/6:FADE OUT
+AutoCompletion/Transition/Items/7:FADE TO BLACK
+AutoCompletion/Transition/Items/8:JUMP CUT TO:
+AutoCompletion/Transition/Items/9:MATCH CUT TO:
+AutoCompletion/Transition/Items/10:SLOW FADE TO BLACK
+AutoCompletion/Transition/Items/11:SMASH CUT TO:
+AutoCompletion/Transition/Items/12:TIME CUT:
+#End-Auto-Completion 
+#Begin-Config 
+FontSize:12
+Margin/Bottom:25.40
+Margin/Left:38.10
+Margin/Right:25.40
+Margin/Top:12.70
+Paper/Height:297.00
+Paper/Width:210.00
+PageBreakActionLines:2
+PageBreakDialogueLines:2
+SceneContinueds:False
+SceneContinuedIndent:45
+ShowSceneNumbers:False
+IncludeTOC:True
+ShowTOC:True
+OpenOnCurrentPage:True
+RemoveNotes:False
+OutlineNotes:True
+ShowMargins:False
+ShowLineNumbers:False
+Cursor/Line:98
+Cursor/Column:4
+String/MoreDialogue:(MORE)
+String/ContinuedPageEnd:(CONTINUED)
+String/ContinuedPageStart:CONTINUED:
+String/DialogueContinued: (cont'd)
+Element/Scene/BeforeSpacing:10
+Element/Scene/IntraSpacing:0
+Element/Scene/Indent:0
+Element/Scene/Width:60
+Element/Scene/Screen/AllCaps:True
+Element/Scene/Screen/Bold:True
+Element/Scene/Screen/Italic:False
+Element/Scene/Screen/Underlined:False
+Element/Scene/Export/AllCaps:True
+Element/Scene/Export/Bold:True
+Element/Scene/Export/Italic:False
+Element/Scene/Export/Underlined:False
+Element/Action/BeforeSpacing:10
+Element/Action/IntraSpacing:0
+Element/Action/Indent:0
+Element/Action/Width:60
+Element/Action/Screen/AllCaps:False
+Element/Action/Screen/Bold:False
+Element/Action/Screen/Italic:False
+Element/Action/Screen/Underlined:False
+Element/Action/Export/AllCaps:False
+Element/Action/Export/Bold:False
+Element/Action/Export/Italic:False
+Element/Action/Export/Underlined:False
+Element/Character/BeforeSpacing:10
+Element/Character/IntraSpacing:0
+Element/Character/Indent:22
+Element/Character/Width:38
+Element/Character/Screen/AllCaps:True
+Element/Character/Screen/Bold:False
+Element/Character/Screen/Italic:False
+Element/Character/Screen/Underlined:False
+Element/Character/Export/AllCaps:True
+Element/Character/Export/Bold:False
+Element/Character/Export/Italic:False
+Element/Character/Export/Underlined:False
+Element/Dialogue/BeforeSpacing:0
+Element/Dialogue/IntraSpacing:0
+Element/Dialogue/Indent:10
+Element/Dialogue/Width:35
+Element/Dialogue/Screen/AllCaps:False
+Element/Dialogue/Screen/Bold:False
+Element/Dialogue/Screen/Italic:False
+Element/Dialogue/Screen/Underlined:False
+Element/Dialogue/Export/AllCaps:False
+Element/Dialogue/Export/Bold:False
+Element/Dialogue/Export/Italic:False
+Element/Dialogue/Export/Underlined:False
+Element/Parenthetical/BeforeSpacing:0
+Element/Parenthetical/IntraSpacing:0
+Element/Parenthetical/Indent:16
+Element/Parenthetical/Width:25
+Element/Parenthetical/Screen/AllCaps:False
+Element/Parenthetical/Screen/Bold:False
+Element/Parenthetical/Screen/Italic:False
+Element/Parenthetical/Screen/Underlined:False
+Element/Parenthetical/Export/AllCaps:False
+Element/Parenthetical/Export/Bold:False
+Element/Parenthetical/Export/Italic:False
+Element/Parenthetical/Export/Underlined:False
+Element/Transition/BeforeSpacing:10
+Element/Transition/IntraSpacing:0
+Element/Transition/Indent:45
+Element/Transition/Width:20
+Element/Transition/Screen/AllCaps:True
+Element/Transition/Screen/Bold:False
+Element/Transition/Screen/Italic:False
+Element/Transition/Screen/Underlined:False
+Element/Transition/Export/AllCaps:True
+Element/Transition/Export/Bold:False
+Element/Transition/Export/Italic:False
+Element/Transition/Export/Underlined:False
+Element/Shot/BeforeSpacing:10
+Element/Shot/IntraSpacing:0
+Element/Shot/Indent:0
+Element/Shot/Width:60
+Element/Shot/Screen/AllCaps:True
+Element/Shot/Screen/Bold:False
+Element/Shot/Screen/Italic:False
+Element/Shot/Screen/Underlined:False
+Element/Shot/Export/AllCaps:True
+Element/Shot/Export/Bold:False
+Element/Shot/Export/Italic:False
+Element/Shot/Export/Underlined:False
+Element/Note/BeforeSpacing:10
+Element/Note/IntraSpacing:0
+Element/Note/Indent:5
+Element/Note/Width:55
+Element/Note/Screen/AllCaps:False
+Element/Note/Screen/Bold:False
+Element/Note/Screen/Italic:True
+Element/Note/Screen/Underlined:False
+Element/Note/Export/AllCaps:False
+Element/Note/Export/Bold:False
+Element/Note/Export/Italic:True
+Element/Note/Export/Underlined:False
+Element/Act break/BeforeSpacing:10
+Element/Act break/IntraSpacing:0
+Element/Act break/Indent:25
+Element/Act break/Width:10
+Element/Act break/Screen/AllCaps:True
+Element/Act break/Screen/Bold:True
+Element/Act break/Screen/Italic:False
+Element/Act break/Screen/Underlined:True
+Element/Act break/Export/AllCaps:True
+Element/Act break/Export/Bold:False
+Element/Act break/Export/Italic:False
+Element/Act break/Export/Underlined:True
+Font/Bold-Italic/Name:
+Font/Bold-Italic/Filename:
+Font/Bold/Name:
+Font/Bold/Filename:
+Font/Italic/Name:
+Font/Italic/Filename:
+Font/Normal/Name:
+Font/Normal/Filename:
+#End-Config 
+#Begin-Locations 
+Locations:0
+#End-Locations 
+#Begin-Spell-Checker-Dict 
+Words:0
+#End-Spell-Checker-Dict 
+#Title-String 0.000000,105.000000,24,cb,Helvetica,,Swords & Meadows: Online
+#Title-String 0.000000,120.460000,18,cu,Helvetica,,Trailer Script
+#Title-String 0.000000,135.460000,12,c,Courier,,by\n\nTristan M.
+#Title-String 10.000000,280.000000,12,,Helvetica,,© Emberlight Interactive
+#Header-String 1,0,r,,${PAGE}.
+#Header-Empty-Lines 1
+#Start-Script 
+.\EXT. Clear Forest Path - Day
+>.Two mages travel down a path between two forests. It is a
+..beautiful day. Background music reflects this.
+..A spell is shot from within the forest.
+..Music stops.
+._Player One
+.((suprised)
+.:What the-?
+>.A group of mages emerge from behind the tree sprites and a
+..fight between the two groups begin.
+>.The two mages put up a semi decent fight before being killed
+..and having their loot stolen.
+._PLAYER ONE
+>:Yeah, I think we're going to need
+.:some help
+>.PLAYER ONE opens up a steam chat instance and begins typing
+..to his friend
+.."Hey, can you help"
+.\INT. Player three DESKTOP
+..On the screen is a browser window with a google search
+.."What is alt f4?"
+..A steam chat instance pops up from PLAYER ONE.
+..The message reads
+.."Hey, can you help us?"
+>.In the chat instance this is immediatley followed up with a
+..link
+.."https://swordsandmeadows.online/invite/D67E334"
+..PLAYER THREE hovers over the link before clicking.
+..Adventerous music begins to fade in
+>.A loading screen with the Swords & Meadows: Online logo
+..shows in the browser window
+>.The screen is "pulled" towards the player like they are
+>.being teleported into the game. Similar to an interstellar
+.."hyperdrive" effect.
+.\EXT. PLAYER ONE's Town - day
+..The game loads in with a bloom effect that fades out
+>.PLAYER THREE pops into a bustling town and begins moving
+..amongst the villagers.
+._Narrator (V.o.)
+>:Welcome, to the land of swords and
+.:meadows, online
+.\EXT. Meadows - day
+>.PLAYER THREE, PLAYER ONE and PLAYER TWO travel together
+..across meadows.
+..PLAYER THREE is in front "leading" the pack.
+>.PLAYER ONE is collecting stone from a quarry then moves to
+..collect ore from an ore node.
+..PLAYER TWO is collecting wood from a tree.
+._NARRATOR (V.O.)
+>:It's not just you here. All players
+.:co-exist in the same world.
+.\EXT. DESERTER CAMP - day
+..In the frame is a collection of villagers around a campfire.
+>.PLAYER THREE enters the scene and moves towards the
+..villagers. PLAYER THREE stops just next to the group.
+..The villagers acknowlegde the player with status indicators.
+._NARRATOR (V.O.)
+>:Every action you take, affects
+.:Everyone
+.\EXT. MEADOWS 2 - DAY
+>.PLAYER THREE is with a group of villagers. PLAYER THREE
+..places down a "Base Post".
+>.The camera begins to zoom out. As it zooms out there is a
+..timelapse over the next 3 iterations of the base
+.\EXT. RUINS - day
+>.PLAYER THREE is moving amongst ruins. Up ahead a chest
+>.enters the frame. PLAYER THREE interacts with the chest from
+..a distance to reveal it's contents.
+>.An enemy player enters the frame and the two enter a fight.
+..The enemy is realatively quick to defeat. Drops magic.
+._NARRATOR (V.O.)
+>:Not all players will be so
+.:welcoming
+.\EXT. PLAYER THREE Town - crafting ui - day
+>.PLAYER THREE navigates through the 4 visible sword crafting
+..recipes. Selects and crafts two sword types.
+.\EXT. Meadows 3 - Day
+>.PLAYER THREE moves across a meadow with a small, lightly
+>.armoured army. As they move a timelapse happens with 3
+..iterations of a stronger and stronger army.
+>.PLAYER THREE is kept to the right of the screen to move
+..attention away from personal customizability.
+.\EXT. BATTLEFieLD - day
+>.Camera follows PLAYER THREE and their army. They move upon a
+..raging battle with mages in combat.
+>.The soldiers rush forward to join the battle. The mage moves
+..to engage the enemy mages.
+>.The camera begins to slowly rise up, encompassing the vast
+>.size of the battle. Clouds begin to obscure the camera. Fade
+..to dark.
+..Logo fade in
+..URL
+.."Coming Soon"
+..(c) Emberlight Interactive
+._NARRATOR (V.O.)
+>:Join now and stake your claim to
+>:rule; in the vast open world; of
+.:swords and meadows; online
+..End.
