@@ -1,13 +1,13 @@
 Two Mages traveling, exciting bubbling dora music plays
 Magic spell shoots from trees, music stops "What the-?", ambush proceeds, players get wiped out 
 "Yeah I think we're going to need some help"
-Pull up steam chat and writes "Bruh can you help us?"
+Pull up steam chat and writes "Hey can you help us?"
 
 Swap to friend desktop - google search "What is alt f4?" with funny book mark folders
 
 Steam chat box pops up with message and link sent right after
 
-"Bruh can you help us? https://swordsandmeadows.online/invite/D67E334"
+"Hey can you help us? https://swordsandmeadows.online/invite/D67E334"
 
 Mouse hovers over link, clicks, screen tear into loading 
 
@@ -51,10 +51,12 @@ Adventurous music "Danunu danunuadu duduunodunodunoduno"
 
 14 spell sound effects
 
-4 Sound effects for "sucking" collectables
-4 sound effects for breaking interactable
+Succ sounds effect 
 "Placement" sound effect
 Chest open sound effect
+Tree harvest sound effect
+Ore Node harvest sound effect
+Stone quarry harvest sound effect
 
 "What the-" "Yeah I think we're going to need some help" - Voice Actor 1
 Narrator VO
@@ -62,7 +64,7 @@ Narrator VO
 Logo with loading screen
 
 Draggable tree of craftable swords
-- top craft panel, left recipie, right draggable crafting options
+- top craft panel, left recipe, right draggable crafting options
 - UI of inventory below with items for crafting sword
 --- 
 
