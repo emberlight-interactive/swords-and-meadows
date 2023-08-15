@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html prefix="og: https://ogp.me/ns#">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Swords & Meadows: Online</title>
+  <meta property="og:title" content="Swords & Meadows: Online" />
+  <meta property="og:image" content="./shared/media/cover-1440-16-9.png" />
+  <meta property="og:description" content="2D Open world browser MMO. Compete with unlimited players for influence and resources" />
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
   <style>
     body {
@@ -162,7 +165,13 @@
     }
     .logo {
       box-sizing: border-box;
+      padding-bottom: 20px;
       width: 100%;
+    }
+    @media only screen and (max-width: 800px) {
+      .logo {
+        padding-bottom: 10px;
+      }
     }
     .mailing-form {
       margin: 0;
@@ -289,7 +298,7 @@
 
     <div class="overlay-container">
       <div class="logo-box">
-        <img src="./shared/media/logo.png" class="logo">
+        <img src="./shared/media/logo-m.png" class="logo">
         <div class="selling-points">
           <span onclick="openPopup('singleServer')">Single Server Browser-based MMO.</span>
           <span onclick="openPopup('openWorld')">Open World.</span>
@@ -433,7 +442,7 @@
       var video = document.getElementById('video');
       video.load();
 
-      function toggleVideo() {
+      globalThis.toggleVideo = function() {
         video.paused ? video.play() : video.pause();
         const playButton = document.querySelector('.button--play');
         const playButtonContainer = document.querySelector('.play');
@@ -468,13 +477,13 @@
         }
       };
 
-      function openPopup(contentKey) {
+      globalThis.openPopup = function(contentKey) {
         document.getElementById("popup").style.display = "block";
         document.getElementById("popUpTitle").innerText = content[contentKey].title;
         document.getElementById("popUpDescription").innerText = content[contentKey].description;
       }
 
-      function closePopup() {
+      globalThis.closePopup = function() {
         document.getElementById("popup").style.display = "none";
       }
 
@@ -504,5 +513,28 @@
     </script>
     <script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
     <script src="https://www.google.com/recaptcha/api.js?hl=en"></script>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "firebase/app";
+      import { getAnalytics } from "firebase/analytics";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyC_QaiplORYn23fLHf-txM3xpVQiA170k0",
+        authDomain: "swords-and-meadows.firebaseapp.com",
+        projectId: "swords-and-meadows",
+        storageBucket: "swords-and-meadows.appspot.com",
+        messagingSenderId: "673640468637",
+        appId: "1:673640468637:web:c9340e4c7a195b51dec474",
+        measurementId: "G-5GR4LP0MNE"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
   </body>
 </html>
