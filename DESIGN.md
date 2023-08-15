@@ -17,6 +17,10 @@
 
 ### Technical considerations
 - Low overhead when networked
+- What needs to exist in the first iteration and persist forever?
+  - Listener to reload page when _hard_ update is detected
+  - System to pause gameplay until deployment is complete
+  - Server restart message (Admin controlled messaging)
 
 ## High Concept
 
@@ -70,6 +74,8 @@ flowchart TD
 - Upon spawn you are granted full health and a token amount of magic
 - If using friend link use graph to find nearest adjacent free position to spawn player
 - Player entity will remain in place and grey out when signed out. Can be killed and have items stolen
+- Steps need to be taken to ensure spawning from any source does not leave the player in a trapped position
+  - This may be remedied with a simple suicide option
 
 ### Resources
 
