@@ -1,5 +1,8 @@
 {
   "private": true,
+  "engines": {
+    "node": "16.20.1"
+  },
   "scripts": {
     "server": "tsx watch ./src/server.ts",
     "start": "webpack serve --mode=development --stats-error-details --node-env development",
