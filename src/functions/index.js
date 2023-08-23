@@ -48,6 +48,7 @@ exports.pushSubscription = onRequest(async (request, response) => {
     pushNotifyRef.add({
       ip: request.headers['fastly-client-ip'] || '0.0.0.0',
       token: String(request.body?.token) || '',
+      timestamp: Date.now(),
     });
 
     response.status(200).send();

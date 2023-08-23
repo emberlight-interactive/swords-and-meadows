@@ -508,6 +508,11 @@
           popup.style.display = "none";
         }
       };
+
+      globalThis.showMailingForm = function() {
+        document.getElementById("sib-form-container").style.display = "block";
+        document.getElementById("notify-me").style.display = "none";
+      }
     </script>
 
     <script>
@@ -577,11 +582,6 @@
         }
 
         showMailingForm();
-      }
-
-      globalThis.showMailingForm = function() {
-        document.getElementById("sib-form-container").style.display = "block";
-        document.getElementById("notify-me").style.display = "none";
       }
     </script>
   </body>
