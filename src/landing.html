@@ -518,6 +518,7 @@
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "firebase/app";
       import { getAnalytics } from "firebase/analytics";
+      import { getMessaging, getToken } from "firebase/messaging";
       // TODO: Add SDKs for Firebase products that you want to use
       // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -536,6 +537,39 @@
       // Initialize Firebase
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
+      const messaging = getMessaging(app);
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register(new URL('./landing/landing-sw.js', import.meta.url)).then(function (registration) {
+          getToken(messaging, {
+            serviceWorkerRegistration: registration,
+            vapidKey: "BOwOy50uBDyl9Wj2V9Z5BAAacCwjwhTRagGwzb5rk16AEJIOUbtJrEBwV-fKPlBnjTlTVWONDlnCl6wUC4DACSo"
+          }).then(function (token) {
+            if (token) {
+              fetch(
+                process.env.firebase_functions_server + 'pushSubscription',
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ token })
+                }
+              );
+              console.log(token);
+            }
+          });
+
+
+          globalThis.requestNotificationPermission = function () {
+            if ('Notification' in window) {
+              Notification.requestPermission();
+            }
+          }
+
+          requestNotificationPermission();
+        });
+      }
     </script>
   </body>
 </html>

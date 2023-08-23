@@ -14,10 +14,12 @@
     "server": "tsx watch ./src/server.ts",
     "start": "webpack serve --mode=development --stats-error-details --node-env development",
     "website": "parcel serve ./src/landing.html --dist-dir ./dist-website",
+    "functions": "firebase emulators:start --only functions",
     "prebuild-website": "rimraf dist-website",
     "build-website": "parcel build ./src/landing.html --dist-dir ./dist-website",
     "build": "webpack --mode=production --node-env production && phaser-asset-pack-hashing -r dist",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "deploy": "firebase deploy"
   },
   "devDependencies": {
     "@colyseus/monitor": "^0.15.1",
@@ -34,6 +36,7 @@
     "eslint-plugin-prettier": "^5.0.0",
     "express": "^4.18.2",
     "firebase": "^10.1.0",
+    "firebase-tools": "^12.4.6",
     "html-webpack-plugin": "^5.3.1",
     "parcel": "^2.9.3",
     "phaser": "^3.60.0",
