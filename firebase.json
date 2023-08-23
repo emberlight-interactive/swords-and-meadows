@@ -10,7 +10,27 @@
       {
         "source": "**",
         "destination": "/landing.html"
+      },
+      {
+        "source": "/pushSubscription",
+        "function": "pushSubscription"
+      },
+      {
+        "source": "/notifyPlzLol",
+        "function": "notifyPlzLol"
       }
     ]
-  }
+  },
+  "functions": [
+    {
+      "source": "src/functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    }
+  ]
 }
