@@ -6,9 +6,10 @@
  *
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
+const { setGlobalOptions } = require('firebase-functions/v2');
 
+setGlobalOptions({ region: 'us-central1' });
 const { onRequest } = require('firebase-functions/v2/https');
-const logger = require('firebase-functions/logger');
 const {
   initializeApp,
   // applicationDefault,
@@ -41,15 +42,16 @@ exports.pushSubscription = onRequest(async (request, response) => {
       .get()
   ).data().count;
 
-  if (count > 5) response.status(200).send();
+  if (count > 5) {
+    response.status(200).send();
+  } else {
+    pushNotifyRef.add({
+      ip: request.headers['fastly-client-ip'] || '0.0.0.0',
+      token: String(request.body?.token) || '',
+    });
 
-  logger.info('Hello logs!', { structuredData: true });
-  response.send('Hello from Firebase! ' + count);
-
-  pushNotifyRef.add({
-    ip: request.ip || '0.0.0.0',
-    token: String(request.body?.token) || '',
-  });
+    response.status(200).send();
+  }
 });
 
 exports.notifyPlzLol = onRequest(async (request, response) => {
@@ -59,29 +61,35 @@ exports.notifyPlzLol = onRequest(async (request, response) => {
     }
   })();
 
-  console.log(record.data());
+  console.log(request.body);
 
   if (record) {
-    sendNotification(record.data().token);
+    sendNotification(record.data().token, request.body.config);
   }
 
   return response.status(200).send();
 });
 
-async function sendNotification(token) {
+exports.hello = onRequest(async (request, response) => {
+  return response.status(200).send('Do I work');
+});
+
+async function sendNotification(token, config) {
   const message = {
     webpush: {
-      notification: {
-        title: 'Price drop',
-        body: '5% off all electronics',
-        image: 'https://swordsandmeadows.online/logo-m.81522d15.png',
-        data: {
-          url: 'https://swordsandmeadows.online',
-        },
-      },
+      notification: config,
     },
     token,
   };
 
   await getMessaging().send(message);
 }
+
+// {
+//   title: 'Price drop',
+//   body: '5% off all electronics',
+//   image: 'https://swordsandmeadows.online/logo-m.81522d15.png',
+//   data: {
+//     url: 'https://swordsandmeadows.online',
+//   },
+// },

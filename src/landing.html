@@ -320,7 +320,7 @@
       </div>
 
       <div class="sib-form mail-form-container">
-        <div id="sib-form-container" class="sib-form-container">
+        <div id="sib-form-container" class="sib-form-container" style="display: none;">
           <div id="error-message" class="sib-form-message-panel" style="font-size:16px; text-align:left; color:#661d1d; background-color:#ffeded; border-color:#ff4949;max-width:430px;">
             <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
               <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon">
@@ -369,7 +369,7 @@
                     Join Waiting List
                   </button>
                 </div>
-                <span style="color: rgb(82, 82, 82); font-size: 10px;">This site is protected by reCAPTCHA and the Google <a style="color: rgb(45, 45, 147);" href="https://policies.google.com/privacy">Privacy Policy</a> and <a style="color: rgb(45, 45, 147);" href="https://policies.google.com/terms">Terms of Service</a> apply.</span>
+                <span style="color: rgb(82, 82, 82); font-size: 11px; display: block; padding-top: 10px;">This site is protected by reCAPTCHA and the Google <a style="color: rgb(45, 45, 147);" href="https://policies.google.com/privacy">Privacy Policy</a> and <a style="color: rgb(45, 45, 147);" href="https://policies.google.com/terms">Terms of Service</a> apply.</span>
               </div>
               <div class="g-recaptcha" data-sitekey="6Ld_TlknAAAAAA0gDWXN7M-6BJd9QQb8syqH3I-C" data-callback="invisibleCaptchaCallback" data-size="invisible" onclick="executeCaptcha"></div>
 
@@ -378,6 +378,20 @@
             </form>
           </div>
         </div>
+
+        <form id="notify-me">
+          <button
+            class="btn2 sib-form-block__button-with-loader"
+            style="display: flex; align-items: center; justify-content: center;"
+            type="button"
+            onclick="requestNotificationPermission()"
+            >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 7.037h-2V10H8.037v2H11v2.963h2V12h2.963v-2H13z"/><path fill="currentColor" d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z"/></svg>
+            &nbsp;Notify Me
+          </button>
+
+          <span style="color: rgb(82, 82, 82); font-size: 13px; display: block; padding-top: 10px;">Opens browser notification prompt. Alternatively, <a style="color: rgb(45, 45, 147); cursor: pointer" onclick="showMailingForm()">join the waiting list</a></span>
+        </form>
       </div>
     </div>
 
@@ -539,36 +553,35 @@
       const analytics = getAnalytics(app);
       const messaging = getMessaging(app);
 
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register(new URL('./landing/landing-sw.js', import.meta.url)).then(function (registration) {
-          getToken(messaging, {
-            serviceWorkerRegistration: registration,
-            vapidKey: "BOwOy50uBDyl9Wj2V9Z5BAAacCwjwhTRagGwzb5rk16AEJIOUbtJrEBwV-fKPlBnjTlTVWONDlnCl6wUC4DACSo"
-          }).then(function (token) {
-            if (token) {
-              fetch(
-                process.env.firebase_functions_server + 'pushSubscription',
-                {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({ token })
-                }
-              );
-              console.log(token);
-            }
+      globalThis.requestNotificationPermission = function() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register(new URL('./landing/landing-sw.js', import.meta.url)).then(function (registration) {
+            getToken(messaging, {
+              serviceWorkerRegistration: registration,
+              vapidKey: "BOwOy50uBDyl9Wj2V9Z5BAAacCwjwhTRagGwzb5rk16AEJIOUbtJrEBwV-fKPlBnjTlTVWONDlnCl6wUC4DACSo"
+            }).then(function (token) {
+              if (token) {
+                fetch(
+                  process.env.firebase_functions_server + 'pushSubscription',
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ token })
+                  }
+                );
+              }
+            });
           });
+        }
 
+        showMailingForm();
+      }
 
-          globalThis.requestNotificationPermission = function () {
-            if ('Notification' in window) {
-              Notification.requestPermission();
-            }
-          }
-
-          requestNotificationPermission();
-        });
+      globalThis.showMailingForm = function() {
+        document.getElementById("sib-form-container").style.display = "block";
+        document.getElementById("notify-me").style.display = "none";
       }
     </script>
   </body>

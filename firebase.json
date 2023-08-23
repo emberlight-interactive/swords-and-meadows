@@ -8,16 +8,20 @@
     ],
     "rewrites": [
       {
-        "source": "**",
-        "destination": "/landing.html"
-      },
-      {
         "source": "/pushSubscription",
         "function": "pushSubscription"
       },
       {
         "source": "/notifyPlzLol",
         "function": "notifyPlzLol"
+      },
+      {
+        "source": "/hello",
+        "function": "hello"
+      },
+      {
+        "source": "**",
+        "destination": "/landing.html"
       }
     ]
   },
