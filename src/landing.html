@@ -287,12 +287,12 @@
 <body>
   <!-- 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 -->
     <!-- Make these videos a background, scroll hides, end has transparent window to show the video still running -->
-    <video id="video" preload="none" class="header-video-playback" muted loop disableRemotePlayback>
-      <source id="source-slow-mobile" src="./shared/media/mage-combat-mobile-480-30.webm" type="video/webm">
-      <source id="source-full-mobile" src="./shared/media/smo-mobile-720-30.webm" type="video/webm">
-      <source id="source-small-desktop" src="./shared/media/720-smo.webm" type="video/webm">
-      <source id="source-medium-desktop" src="./shared/media/1080-smo.webm" type="video/webm">
-      <source id="source-large-desktop" src="./shared/media/1440-smo.webm" type="video/webm">
+    <video id="video" preload="none" class="header-video-playback" muted loop disableRemotePlayback playsinline>
+      <source id="source-slow-mobile" src="./shared/media/mage-combat-mobile-480-30.mp4#t=0.1" type="video/mp4">
+      <source id="source-full-mobile" src="./shared/media/smo-mobile-720-30.mp4#t=0.1" type="video/mp4">
+      <source id="source-small-desktop" src="./shared/media/720-smo.mp4#t=0.1" type="video/mp4">
+      <source id="source-medium-desktop" src="./shared/media/1080-smo.mp4#t=0.1" type="video/mp4">
+      <source id="source-large-desktop" src="./shared/media/1440-smo.mp4#t=0.1" type="video/mp4">
     </video>
 
     <div class="hero-header"></div>
@@ -384,7 +384,7 @@
             class="btn2 sib-form-block__button-with-loader"
             style="display: flex; align-items: center; justify-content: center;"
             type="button"
-            onclick="requestNotificationPermission()"
+            onclick="showMailingForm(); requestNotificationPermission()"
             >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 7.037h-2V10H8.037v2H11v2.963h2V12h2.963v-2H13z"/><path fill="currentColor" d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z"/></svg>
             &nbsp;Notify Me
@@ -428,9 +428,7 @@
         'source-large-desktop',
       ];
 
-      if (partialMobileExperience) {
-        useVideoSource('source-slow-mobile');
-      } else if (fullMobileExperience) {
+      if (partialMobileExperience || fullMobileExperience) {
         useVideoSource('source-full-mobile');
       } else {
         var sourceToUse = (function () {
@@ -455,6 +453,7 @@
       }
 
       var video = document.getElementById('video');
+      video.setAttribute('preload', 'metadata');
       video.load();
 
       globalThis.toggleVideo = function() {
@@ -580,8 +579,6 @@
             });
           });
         }
-
-        showMailingForm();
       }
     </script>
   </body>
