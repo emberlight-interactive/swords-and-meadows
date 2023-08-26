@@ -301,17 +301,17 @@
       <div class="logo-box">
         <img src="./shared/media/logo-m.png" class="logo">
         <div class="selling-points">
-          <span onclick="openPopup('singleServer')">Single Server Browser-based MMO.</span>
-          <span onclick="openPopup('openWorld')">Open World.</span>
-          <span onclick="openPopup('mageCombat')">Mage Combat.</span>
-          <span onclick="openPopup('societydevelopment')">Society Development.</span>
-          <span onclick="openPopup('armybuilding')">Army Building.</span>
-          <span onclick="openPopup('empireConquest')">Empire Conquest.</span>
+          <span onclick="openPopup('singleServer'); viewInfoEvent('single_server')">Single Server Browser-based MMO.</span>
+          <span onclick="openPopup('openWorld'); viewInfoEvent('open_world')">Open World.</span>
+          <span onclick="openPopup('mageCombat'); viewInfoEvent('mage_combat')">Mage Combat.</span>
+          <span onclick="openPopup('societydevelopment'); viewInfoEvent('society_development')">Society Development.</span>
+          <span onclick="openPopup('armybuilding'); viewInfoEvent('army_building')">Army Building.</span>
+          <span onclick="openPopup('empireConquest'); viewInfoEvent('empire_conquest')">Empire Conquest.</span>
         </div>
       </div>
 
       <div class="play-button">
-        <div class="play" onclick="toggleVideo()">
+        <div class="play" onclick="toggleVideo(); videoPlayEvent()">
           <div class="button button--play">
             <div class="button__shape button__shape--one"></div>
             <div class="button__shape button__shape--two"></div>
@@ -362,7 +362,7 @@
               </div>
               <div style="padding: 8px 0 0 0;">
                 <div class="sib-form-block" style="text-align: center; padding: 0;">
-                  <button class="btn2 sib-form-block__button-with-loader" form="sib-form" type="submit">
+                  <button class="btn2 sib-form-block__button-with-loader" form="sib-form" type="submit" onclick="attemptWaitingListJoinEvent()">
                     <svg class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon" viewBox="0 0 512 512">
                       <path d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z" />
                     </svg>
@@ -384,13 +384,13 @@
             class="btn2 sib-form-block__button-with-loader"
             style="display: flex; align-items: center; justify-content: center;"
             type="button"
-            onclick="showMailingForm(); requestNotificationPermission()"
+            onclick="showMailingForm(); notifyMeEvent(); requestNotificationPermission()"
             >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 7.037h-2V10H8.037v2H11v2.963h2V12h2.963v-2H13z"/><path fill="currentColor" d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z"/></svg>
             &nbsp;Notify Me
           </button>
 
-          <span style="color: rgb(82, 82, 82); font-size: 13px; display: block; padding-top: 10px;">Opens browser notification prompt. Alternatively, <a style="color: rgb(45, 45, 147); cursor: pointer" onclick="showMailingForm()">join the waiting list</a></span>
+          <span style="color: rgb(82, 82, 82); font-size: 13px; display: block; padding-top: 10px;">Opens browser notification prompt. Alternatively, <a style="color: rgb(45, 45, 147); cursor: pointer" onclick="showMailingForm(); mailingListAlternativeEvent()">join the waiting list</a></span>
         </form>
       </div>
     </div>
@@ -535,7 +535,7 @@
     <script type="module">
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "firebase/app";
-      import { getAnalytics } from "firebase/analytics";
+      import { getAnalytics, logEvent } from "firebase/analytics";
       import { getMessaging, getToken } from "firebase/messaging";
       // TODO: Add SDKs for Firebase products that you want to use
       // https://firebase.google.com/docs/web/setup#available-libraries
@@ -580,6 +580,35 @@
           });
         }
       }
+
+      globalThis.viewInfoEvent = function(infoName) {
+        logEvent(analytics, 'view_info', {
+          info_title: infoName,
+        });
+      }
+
+      globalThis.videoPlayEvent = function() {
+        logEvent(analytics, 'video_play');
+      }
+
+      globalThis.notifyMeEvent = function() {
+        logEvent(analytics, 'notify_me');
+      }
+
+      globalThis.mailingListAlternativeEvent = function() {
+        logEvent(analytics, 'mailing_list_alternative');
+      }
+
+      globalThis.attemptWaitingListJoinEvent = function() {
+        logEvent(analytics, 'subscription_attempted');
+      }
+
+      window.onerror = function(message, source) {
+        logEvent(analytics, 'error', {
+          message: message,
+          source: source,
+        });
+      };
     </script>
   </body>
 </html>
