@@ -11,32 +11,31 @@
     }
   },
   "scripts": {
-    "server": "tsx watch ./src/server.ts",
+    "server": "tsx watch --tsconfig tsconfig.server.json ./src/server.ts",
     "start": "webpack serve --mode=development --stats-error-details --node-env development",
-    "website": "parcel serve ./src/landing.html --dist-dir ./dist-website",
-    "functions": "firebase emulators:start --only functions",
-    "prebuild-website": "rimraf dist-website",
-    "build-website": "parcel build ./src/landing.html --dist-dir ./dist-website",
-    "build": "webpack --mode=production --node-env production && phaser-asset-pack-hashing -r dist",
-    "lint": "eslint . --ext .ts",
-    "deploy": "firebase deploy"
+    "website": "parcel serve ./src/landing.html --dist-dir ./dist/website",
+    "prebuild-website": "rimraf dist/website",
+    "build-website": "parcel build ./src/landing.html --dist-dir ./dist/website",
+    "prebuild-server": "rimraf dist/server/built",
+    "build-server": "tsc --project tsconfig.server.json",
+    "postbuild-server": "copyfiles package.json package-lock.json dist/server",
+    "build-client": "webpack --mode=production --node-env production && phaser-asset-pack-hashing -r dist/client",
+    "lint": "eslint . --ext .ts"
   },
   "devDependencies": {
-    "@colyseus/monitor": "^0.15.1",
     "@types/node": "^20.4.1",
     "@types/webpack": "^4.41.33",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "clean-webpack-plugin": "^3.0.0",
-    "colyseus": "^0.15.5",
     "colyseus.js": "^0.15.10",
+    "copyfiles": "^2.4.1",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.0.0",
     "express": "^4.18.2",
     "firebase": "^10.1.0",
-    "firebase-tools": "^12.4.6",
     "html-webpack-plugin": "^5.3.1",
     "parcel": "^2.9.3",
     "phaser": "^3.60.0",
@@ -52,5 +51,9 @@
     "webpack-clean-plugin": "^0.2.3",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.4.0"
+  },
+  "dependencies": {
+    "@colyseus/monitor": "^0.15.1",
+    "colyseus": "^0.15.5"
   }
 }

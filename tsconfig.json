@@ -1,19 +1,21 @@
 {
 	"compilerOptions": {
-		"target": "ES2015",
-		"module": "es6",
+		"target": "es5",
+    "module": "commonjs",
 		"strict": true,
 		"noEmit": false,
-		"importHelpers": true,
+		"importHelpers": false,
 		"moduleResolution": "node",
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "downlevelIteration": true,
 		"baseUrl": "./src",
 		"paths": {
 		  "~/*": ["./*"]
 		},
-    "outDir": "./dist",
+    "outDir": "./dist/client",
 		"types": [
 			"phaser"
 		],
