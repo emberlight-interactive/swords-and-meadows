@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "target": "ES2015",
+    "outDir": "./dist/server/built",
+  },
+  "files": [
+    "./src/server.ts"
+  ],
+  "include": [
+    "types/**/*"
+  ]
+}

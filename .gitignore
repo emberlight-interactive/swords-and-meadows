@@ -1,6 +1,8 @@
 # compiled output
-/dist
-/dist-website
+/dist/server/*
+!/dist/server/Dockerfile
+/dist/client
+/dist/website
 /public/dist
 /tmp
 /out-tsc

@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "swords-and-meadows"
-  }
+  },
+  "targets": {
+    "swords-and-meadows": {
+      "hosting": {
+        "swords-and-meadows": [
+          "swords-and-meadows"
+        ],
+        "samo-alpha": [
+          "samo-alpha"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

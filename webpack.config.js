@@ -22,7 +22,7 @@ module.exports = /** @type { import('webpack').Configuration } */ ({
     },
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, './dist/client'),
     filename: '[name]-[contenthash].bundle.js',
     assetModuleFilename: 'assets/[name]-[hash][ext][query]',
   },
@@ -89,7 +89,7 @@ module.exports = /** @type { import('webpack').Configuration } */ ({
     historyApiFallback: true,
     allowedHosts: 'all',
     static: {
-      directory: path.resolve(__dirname, './dist'),
+      directory: path.resolve(__dirname, './dist/client'),
     },
     open: true,
     port: 8080,

@@ -1,6 +1,7 @@
 {
-  "hosting": {
-    "public": "dist-website",
+  "hosting": [{
+    "target": "swords-and-meadows",
+    "public": "dist/website",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -25,9 +26,24 @@
       }
     ]
   },
+  {
+    "target": "samo-alpha",
+    "public": "dist/client",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }],
   "functions": [
     {
-      "source": "src/functions",
+      "source": "dist/functions",
       "codebase": "default",
       "ignore": [
         "node_modules",
