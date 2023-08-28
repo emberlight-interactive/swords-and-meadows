@@ -50,3 +50,5 @@ Thumbs.db
 .firebase
 firebase-debug.log
 ui-debug.log
+
+dump.rdb
