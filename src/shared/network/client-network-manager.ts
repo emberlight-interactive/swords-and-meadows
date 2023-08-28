@@ -52,7 +52,11 @@ export class ClientNetworkManager<TGameState extends Schema> {
   public async connect() {
     console.log('Trying to connect with the server...');
     this.connectionStatus = 'connecting';
-    const client = new Client(env.serverWsUrl);
+    const client = new Client({
+      secure: env.serverSSL,
+      hostname: env.serverHostname,
+      port: env.serverPort,
+    });
 
     try {
       this._room = await client.joinOrCreate(env.serverRoomName, {});
