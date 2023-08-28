@@ -1,6 +1,6 @@
 export interface Env {
-  serverWsUrl: string;
-  serverHttpUrl: string;
+  serverSSL: boolean;
+  serverHostname: string;
   serverPort: number;
   serverRoomName: string;
   clientFixedTimeStep: number;

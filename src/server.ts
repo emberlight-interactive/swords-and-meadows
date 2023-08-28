@@ -9,6 +9,7 @@ import {
 import { monitor } from '@colyseus/monitor';
 import { Schema, MapSchema } from '@colyseus/schema';
 import { Queue } from './shared/util/queue';
+import { matchMaker } from '@colyseus/core';
 
 export class MainRoom extends Room<GameState> {
   public fixedTimeStep = env.serverFixedTimeStep;
@@ -83,6 +84,13 @@ export class MainRoom extends Room<GameState> {
     console.log('room', this.roomId, 'disposing...');
   }
 }
+
+matchMaker.controller.getCorsHeaders = () => {
+  return {
+    'Access-Control-Allow-Origin': '*',
+    Vary: '*',
+  };
+};
 
 const gameServer = new Server({});
 gameServer.define('main', MainRoom);

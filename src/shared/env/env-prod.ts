@@ -1,9 +1,9 @@
 import { Env } from './env.interface';
 
 export const envProd: Env = {
-  serverWsUrl: 'ws://localhost:2567',
-  serverHttpUrl: 'http://localhost:2567',
-  serverPort: 2567,
+  serverSSL: true,
+  serverHostname: 'samo-alpha-server-x562qguoqq-uc.a.run.app',
+  serverPort: 80,
   serverRoomName: 'main',
   clientFixedTimeStep: 1000 / 60,
   serverFixedTimeStep: 1000 / 12,
