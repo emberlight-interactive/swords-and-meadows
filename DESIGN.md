@@ -207,9 +207,9 @@ Tree of spells of the three elements, advanced defense spells should be readily 
 |Construction|Recipe|
 |---|---|
 |Watch Tower|Wood|
-|Reinforced Watch Tower|Wood + Metal|
 |Tower|Stone|
-|Reinforced Tower|Stone + Rare metal|
+|Reinforced Tower|Stone + Metal|
+|Castle Tower|Stone + Rare metal|
 
 #### Platform
 
@@ -256,6 +256,8 @@ Procedural generation simply outlines where regions and resource points will be 
 
 The world will initially be generic. Ruins of different types will create demand for certain regions
 
+Only render character entities that are not obfuscated by visibility blockers
+
 ### Settlements
 
 The 3 craftable parts of a settlement include the walls, towers and player platforms that allow for players to shoot over adjacent walls. Walls are sections "3 units thick" and are the target for a single army unit or player mage attack.
@@ -286,6 +288,17 @@ Direct attacks deal more damage than direct + radius and radius spells
 
 Defense spells can last for a period of time, allowing the player to defend then pop off a collection of attacks
 
+**Attributes**
+
+- Damage
+- Size of projectile
+- Automatic | Semi automatic | Burst
+- Automatic -> Recoil strength
+- Magic cost per projectile (Magic + element fuel)
+- Charge timing
+- Element
+- Radius
+
 ### Equipping Spell Books
 
 Players equip new spells at the node of mouse click combinations. UI IDEA -> mouse pic with sides lighting up every time node is selected.
@@ -305,7 +318,9 @@ Players equip new spells at the node of mouse click combinations. UI IDEA -> mou
 
 ### Inequality Problem
 
-Solve inequality by making the time cost vs maintenance peak at a certain hour count (14??), fast early reward, diminishing returns. If not maintained village crumbles at exponentially slower rate until everyone dies or deserts. Playtime rewarded with visual indicators of experience rather than material wealth. True power can only be solved via large networked groups of players, larger networks of players naturally increase the economy by expanding resource access farther from origin. Makes those far from origin gain temporary benefits, reduces power of group via inflation, gives room for players to avoid the monopolies oppression
+Solve inequality by making the time cost vs maintenance cost at a certain power level, fast early reward, diminishing returns. If not maintained village crumbles at exponentially slower rate until everyone dies or deserts. Playtime rewarded with visual indicators of experience rather than material wealth. True power can only be solved via large networked groups of players, larger networks of players naturally increase the economy by expanding resource access farther from origin. Makes those far from origin gain temporary benefits, reduces power of group via inflation, gives room for players to avoid the monopolies oppression
+
+Entities are used for maintenance reduction. When players are inactive they abandon the colony at a set percentage every hour. This drives up maintenance costs and can make offline players of huge bases suffer huge costs. Solves inequality but allows dedicated players to scale with massive time investment. 
 
 ### Unlimited Multiplayer
 
@@ -330,6 +345,12 @@ Secret sauce for unlimited multiplayer
 - Cloak and staff crafting
 - Accolade system that shows experience or playtime
 - In game chat system
+
+### Town Security
+
+Currently base posts centralize security 
+
+Think about decentralizing security but maintaining qol
 
 ## Asset List
 
@@ -466,3 +487,25 @@ Secret sauce for unlimited multiplayer
 |Storage|[180x270]|1|
 |Meadow Tile Sheet|Prairie Tile Sheet|1|
 |Township Tile Sheet|Town Tile Sheet|1|
+
+
+## Iteration One Game loop
+
+```mermaid
+flowchart TD
+    A[Spawn] -->|from first page load| B[Accumulate Resources]
+    B -->|From land| C{Use Resources}
+    B -->|From defeated players| C
+    B -->|From defeated settlements| C
+    B -->|From base post storage| C
+    B --> |Gather scroll parts from ruins| CC[Craft new spells]
+    CC -->|PvP fights| J[Defeat enemy players]
+    C --> E[Border and Defenses of settlement]
+    C --> F[Maintenance]
+    C --> G[Base Post]
+    C --> GG[Storage]
+    C --> GGG[Housing]
+    G -->JJ[Destroy enemy bases]
+    J --> K[Rule the server]
+    JJ --> K
+```
