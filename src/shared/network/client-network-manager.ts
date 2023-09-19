@@ -1,4 +1,4 @@
-import { MapSchema, Schema } from '@colyseus/schema';
+import type { MapSchema, Schema } from '@colyseus/schema';
 import { Room, Client } from 'colyseus.js';
 import { env } from '../env/env';
 import {

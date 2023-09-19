@@ -5,13 +5,22 @@ export class Queue<T> {
     this.a.push(...elts);
   }
 
-  public shift(): T | undefined {
+  private shuffleElements() {
     if (this.b.length === 0) {
       while (this.a.length > 0) {
         this.b.push(this.a.pop()!);
       }
     }
+  }
+
+  public shift(): T | undefined {
+    this.shuffleElements();
     return this.b.pop();
+  }
+
+  public peek(): T | undefined {
+    this.shuffleElements();
+    return this.b[this.b.length - 1];
   }
 
   public length() {

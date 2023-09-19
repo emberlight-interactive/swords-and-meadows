@@ -1,31 +1,45 @@
 import { Room, Client, Server } from 'colyseus';
-import { GameState } from './shared/network/networked-state/networked-state';
 import { env } from './shared/env/env';
-import {
-  IPlayerInput,
-  PlayerState,
-  playerStateModification,
-} from './shared/network/networked-state/player-networked-state';
 import { monitor } from '@colyseus/monitor';
-import { Schema, MapSchema } from '@colyseus/schema';
 import { Queue } from './shared/util/queue';
 import { matchMaker } from '@colyseus/core';
+import { World } from '@lastolivegames/becsy';
+import { MoveServerPlayers } from './core/systems/move-players/move-server-players';
+import { RecieveClientInput } from './core/systems/network-state-sync/recieve-client-input';
+import { BroadcastMutatedState } from './core/systems/network-state-sync/broadcast-mutated-state';
+import { NetworkedState } from './shared/network/networked-state';
+import { HandleServerConnections } from './core/systems/network-state-sync/handle-server-connections';
+import { HandleServerDisconnections } from './core/systems/network-state-sync/handle-server-disconnections';
 
-export class MainRoom extends Room<GameState> {
-  public fixedTimeStep = env.serverFixedTimeStep;
+export class MainRoom extends Room<NetworkedState> {
+  private fixedTimeStep = 1000 / env.serverTicksPerSecond;
+  private newClientQueue = new Queue<{ sessionId: string }>();
+  private disconnectedClientQueue = new Queue<{ sessionId: string }>();
+  private ecsWorld!: World;
+  public autoDispose = false;
 
-  private inputQueues: Map<Schema, Queue<object>> = new Map();
-
-  public onCreate() {
-    this.setState(new GameState());
-
-    this.state.mapWidth = 800;
-    this.state.mapHeight = 600;
-
-    this.onMessage(0, (client, input) => {
-      const player = this.state.players.get(client.sessionId)!;
-      const inputQueue = this.inputQueues.get(player);
-      inputQueue?.push(input);
+  public async onCreate() {
+    this.setState(new NetworkedState());
+    this.ecsWorld = await World.create({
+      defs: [
+        HandleServerConnections,
+        {
+          newClientQueue: this.newClientQueue,
+        },
+        RecieveClientInput,
+        {
+          room: this,
+        },
+        MoveServerPlayers,
+        HandleServerDisconnections,
+        {
+          disconnectedClientQueue: this.disconnectedClientQueue,
+        },
+        BroadcastMutatedState,
+        {
+          xyTransformMap: this.state.xyTransforms,
+        },
+      ],
     });
 
     let elapsedTime = 0;
@@ -40,44 +54,17 @@ export class MainRoom extends Room<GameState> {
   }
 
   public fixedTick() {
-    this.state.players.forEach(player => {
-      const inputQueue = this.inputQueues.get(player);
-      let input: IPlayerInput | undefined;
-
-      while ((input = <IPlayerInput>inputQueue?.shift())) {
-        playerStateModification(input, player);
-      }
-    });
-  }
-
-  private addStateInstance(
-    sessionId: string,
-    stateList: MapSchema,
-    state: Schema
-  ) {
-    stateList.set(sessionId, state);
-    this.inputQueues.set(state, new Queue());
-  }
-
-  private removeStateInstance(sessionId: string, stateList: MapSchema) {
-    const state = stateList.get(sessionId);
-    stateList.delete(sessionId);
-    this.inputQueues.delete(state);
+    this.ecsWorld.execute();
   }
 
   public onJoin(client: Client) {
     console.log(client.sessionId, 'joined!');
-
-    const player = new PlayerState();
-    player.x = Math.random() * this.state.mapWidth;
-    player.y = Math.random() * this.state.mapHeight;
-
-    this.addStateInstance(client.sessionId, this.state.players, player);
+    this.newClientQueue.push(client);
   }
 
   public onLeave(client: Client) {
     console.log(client.sessionId, 'left!');
-    this.removeStateInstance(client.sessionId, this.state.players);
+    this.disconnectedClientQueue.push(client);
   }
 
   public onDispose() {

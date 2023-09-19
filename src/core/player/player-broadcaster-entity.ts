@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { XYTransformable } from '../../shared/entities/x-y-transformable';
+import { XYTransformable } from '../../shared/models/x-y-transformable';
 import { NetworkBroadcastEntity } from '../../shared/network/client-network-manager';
 import { NetworkCommKey } from '../../shared/network/networked-state/networked-state';
 import {
@@ -7,11 +7,12 @@ import {
   PlayerNetworkedStateBundle,
   IPlayerState,
   playerStateModification,
+  wandPivotOffset,
 } from '../../shared/network/networked-state/player-networked-state';
-import { Destroyable } from '../../shared/entities/destroyable';
-import { ObjectCollectionBuffer } from '../../shared/util/object-collection-buffer';
-import { InputHandler } from '../../shared/entities/input-handler';
-import { Rotatable } from '../../shared/entities/rotatable';
+import { Destroyable } from '../../shared/models/destroyable';
+import { ObjectQueue } from '../../shared/util/object-queue';
+import { InputHandler } from '../../shared/models/input-handler';
+import { Rotatable } from '../../shared/models/rotatable';
 
 type Key = Phaser.Input.Keyboard.Key;
 
@@ -27,7 +28,7 @@ export class PlayerInputHandler implements InputHandler<IPlayerInput> {
     relativeMouseAngle: 0,
   };
 
-  private playerInputBuffer = new ObjectCollectionBuffer<IPlayerInput>();
+  private playerInputBuffer = new ObjectQueue<IPlayerInput>();
 
   constructor(
     private scene: Scene,
@@ -40,6 +41,8 @@ export class PlayerInputHandler implements InputHandler<IPlayerInput> {
       S: this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S),
       D: this.scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
     };
+
+    // this.scene.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => console.log(v));
   }
 
   public getBuffer() {
@@ -95,6 +98,7 @@ export class PlayerBroadcasterEntity
       public tick = 0;
       public _relativeMouseAngle = 0;
       public set relativeMouseAngle(value: number) {
+        // console.log((value + 360) % 360);
         this._relativeMouseAngle = value;
         parentThis.playerWand.angle = value;
       }
@@ -143,5 +147,11 @@ export class PlayerBroadcasterEntity
       this.playerInputHandler.getCurrentInput(),
       this.state
     );
+
+    // this.scene.add.graphics().strokeCircle(
+    //   (16 * Math.cos(Math.PI * 2 * ((this.state.relativeMouseAngle + 360) % 360)/360)) + this.state.x + wandPivotOffset.x,
+    //   (16 * Math.sin(Math.PI * 2 * ((this.state.relativeMouseAngle + 360) % 360)/360)) + this.state.y + wandPivotOffset.y,
+    //   1
+    // );
   }
 }

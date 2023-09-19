@@ -1,19 +1,28 @@
 import { Scene } from 'phaser';
 import { PlayerEntity } from './core/player-entity/player-entity';
-import { GameState } from './shared/network/networked-state/networked-state';
-import { ClientNetworkManager } from './shared/network/client-network-manager';
-import { PlayerBroadcasterEntity } from './core/player/player-broadcaster-entity';
-import { PlayerRecieverEntity } from './core/player/player-reciever-entity';
-import {
-  IPlayerState,
-  PlayerState,
-} from './shared/network/networked-state/player-networked-state';
 import { gameConfig } from './shared/game-config';
 import { WandEntity } from './core/wand-entity/wand-entity';
+import { World } from '@lastolivegames/becsy';
+import { XYTransform } from './shared/components/xy-transform';
+import { Sprite } from './shared/components/sprite';
+import { MoveClientPlayers } from './core/systems/move-players/move-client-players';
+import { InputManager } from './core/systems/input-manager/input-manager';
+import { ClientOwned } from './shared/components/client-owned';
+import { XYDeltas } from './shared/components/xy-deltas';
+import { MoveOtherPlayers } from './core/systems/move-players/move-other-players';
+import { BroadcastClientInput } from './core/systems/input-manager/broadcast-client-input';
+import { RecieveMutatedState } from './core/systems/network-state-sync/recieve-mutated-state';
+import { Client, Room } from 'colyseus.js';
+import type { NetworkedState } from './shared/network/networked-state';
+import { env } from './shared/env/env';
+import { FixedTickManager } from './shared/util/fixed-tick-manager';
 
 export default class Index extends Scene {
-  private clientNetworkManager!: ClientNetworkManager<GameState>;
+  private room!: Room<NetworkedState>;
   private debugFPS!: Phaser.GameObjects.Text;
+  private ecsWorld!: World;
+  private fixedTickManager = new FixedTickManager();
+  private ready = false;
 
   constructor() {
     super('Index');
@@ -27,37 +36,51 @@ export default class Index extends Scene {
   public async create() {
     this.debugFPS = this.add.text(4, 4, '', { color: '#ff0000' });
 
-    this.clientNetworkManager = new ClientNetworkManager<GameState>();
-    await this.clientNetworkManager.connect();
+    console.log('Trying to connect with the server...');
+    const client = new Client({
+      secure: env.serverSSL,
+      hostname: env.serverHostname,
+      port: env.serverPort,
+    });
 
-    this.clientNetworkManager.registerEntity<PlayerState>(
-      this.clientNetworkManager.room.state.players,
-      (stateRef: IPlayerState) => {
-        const wand = new WandEntity(0, 0, this);
-        return new PlayerBroadcasterEntity(
-          this,
-          new PlayerEntity(stateRef.x, stateRef.y, wand, this),
-          wand
-        );
-      },
-      (stateRef: IPlayerState) => {
-        const wand = new WandEntity(0, 0, this);
-        return new PlayerRecieverEntity(
-          new PlayerEntity(stateRef.x, stateRef.y, wand, this),
-          wand
-        );
-      },
-      'player-entity'
-    );
+    try {
+      this.room = await client.joinOrCreate(env.serverRoomName, {});
+    } catch (e) {
+      console.error('Failed to connect');
+    }
+
+    this.ecsWorld = await World.create({
+      defs: [
+        InputManager,
+        {
+          keys: {
+            W: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+            A: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            S: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+            D: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+          },
+          pointer: this.game.input.activePointer,
+        },
+        MoveClientPlayers,
+        MoveOtherPlayers,
+        BroadcastClientInput,
+        {
+          serverBroadcaster: this.room,
+        },
+        RecieveMutatedState,
+        {
+          networkedXYTransformMap: this.room.state.xyTransforms,
+        },
+      ],
+    });
   }
 
   public update(time: number, delta: number): void {
     this.debugFPS.text = `Frame rate: ${this.game.loop.actualFps}`;
-    if (this.clientNetworkManager.connectionStatus !== 'connected') {
-      return;
-    }
 
-    this.clientNetworkManager.fixedTick(delta);
+    if (this.room && this.ecsWorld) {
+      this.fixedTickManager.runTick(delta, () => this.ecsWorld.execute());
+    }
   }
 }
 
