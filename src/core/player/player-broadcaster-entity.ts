@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { XYTransformable } from '../../shared/entities/x-y-transformable';
+import { XYTransformable } from '../../shared/models/x-y-transformable';
 import { NetworkBroadcastEntity } from '../../shared/network/client-network-manager';
 import { NetworkCommKey } from '../../shared/network/networked-state/networked-state';
 import {
@@ -8,10 +8,10 @@ import {
   IPlayerState,
   playerStateModification,
 } from '../../shared/network/networked-state/player-networked-state';
-import { Destroyable } from '../../shared/entities/destroyable';
-import { ObjectCollectionBuffer } from '../../shared/util/object-collection-buffer';
-import { InputHandler } from '../../shared/entities/input-handler';
-import { Rotatable } from '../../shared/entities/rotatable';
+import { Destroyable } from '../../shared/models/destroyable';
+import { ObjectQueue } from '../../shared/util/object-collection-buffer';
+import { InputHandler } from '../../shared/models/input-handler';
+import { Rotatable } from '../../shared/models/rotatable';
 
 type Key = Phaser.Input.Keyboard.Key;
 
@@ -27,7 +27,7 @@ export class PlayerInputHandler implements InputHandler<IPlayerInput> {
     relativeMouseAngle: 0,
   };
 
-  private playerInputBuffer = new ObjectCollectionBuffer<IPlayerInput>();
+  private playerInputBuffer = new ObjectQueue<IPlayerInput>();
 
   constructor(
     private scene: Scene,

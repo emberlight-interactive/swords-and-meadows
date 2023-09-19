@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
-import { XYTransformable } from '~/shared/entities/x-y-transformable';
-import { Destroyable } from '~/shared/entities/destroyable';
+import { XYTransformable } from '~/shared/models/x-y-transformable';
+import { Destroyable } from '~/shared/models/destroyable';
 import greyWizard from '../../shared/assets/grey-wizard.png';
 
 export class PlayerEntity implements XYTransformable, Destroyable {

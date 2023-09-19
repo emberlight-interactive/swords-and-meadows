@@ -1,4 +1,4 @@
-import { XYTransformable } from '../entities/x-y-transformable';
+import { XYTransformable } from '../models/x-y-transformable';
 
 export const followTarget = (
   follower: XYTransformable,

@@ -3,7 +3,7 @@ export interface Env {
   serverHostname: string;
   serverPort: number;
   serverRoomName: string;
-  clientFixedTimeStep: number;
-  serverFixedTimeStep: number;
+  clientTicksPerSecond: number;
+  serverTicksPerSecond: number;
   interpolationFactor: number;
 }

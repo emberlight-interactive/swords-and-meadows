@@ -2,7 +2,7 @@ import { env } from '../env/env';
 
 export class FixedTickManager {
   private elapsedTime = 0;
-  private fixedTimeStep = env.clientFixedTimeStep;
+  private fixedTimeStep = 1000 / env.clientTicksPerSecond;
 
   private currentTick: number = 0;
   public getTick(): number {
@@ -10,9 +10,9 @@ export class FixedTickManager {
   }
 
   public runTick(delta: number, callback: Function) {
-    this.currentTick++;
     this.elapsedTime += delta;
     while (this.elapsedTime >= this.fixedTimeStep) {
+      this.currentTick++;
       this.elapsedTime -= this.fixedTimeStep;
       callback();
     }

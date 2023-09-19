@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
-import { XYTransformable } from '../../shared/entities/x-y-transformable';
-import { Rotatable } from '../../shared/entities/rotatable';
-import { Destroyable } from '../../shared/entities/destroyable';
+import { XYTransformable } from '../../shared/models/x-y-transformable';
+import { Rotatable } from '../../shared/models/rotatable';
+import { Destroyable } from '../../shared/models/destroyable';
 import staff from '../../shared/assets/staff.png';
 
 export class WandEntity implements XYTransformable, Rotatable, Destroyable {
@@ -29,11 +29,11 @@ export class WandEntity implements XYTransformable, Rotatable, Destroyable {
   }
 
   public set angle(value) {
-    this.staffSprite.setAngle(value + 90);
+    this.staffSprite.setAngle(value);
   }
 
   public get angle(): number {
-    return this.staffSprite.angle - 90;
+    return this.staffSprite.angle;
   }
 
   constructor(
