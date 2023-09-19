@@ -12,7 +12,7 @@ import { Queue } from './shared/util/queue';
 import { matchMaker } from '@colyseus/core';
 
 export class MainRoom extends Room<GameState> {
-  public fixedTimeStep = env.serverFixedTimeStep;
+  public fixedTimeStep = 1000 / env.serverTicksPerSecond;
 
   private inputQueues: Map<Schema, Queue<object>> = new Map();
 
