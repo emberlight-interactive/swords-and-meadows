@@ -8,24 +8,32 @@ import {
 } from './shared/network/networked-state/player-networked-state';
 import { monitor } from '@colyseus/monitor';
 import { Schema, MapSchema } from '@colyseus/schema';
-import { Queue } from './shared/util/queue';
 import { matchMaker } from '@colyseus/core';
+import { IProjectileSpawnInput } from './shared/network/networked-state/projectile-networked-state';
+import { InputQueue, KeyedInputData } from './shared/network/input-queue';
 
 export class MainRoom extends Room<GameState> {
   public fixedTimeStep = 1000 / env.serverTicksPerSecond;
+  public clientTicksPerServerTick =
+    env.clientTicksPerSecond / env.serverTicksPerSecond;
 
-  private inputQueues: Map<Schema, Queue<object>> = new Map();
+  private inputQueue = new InputQueue();
 
   public onCreate() {
     this.setState(new GameState());
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this.setPatchRate(null);
 
     this.state.mapWidth = 800;
     this.state.mapHeight = 600;
 
-    this.onMessage(0, (client, input) => {
-      const player = this.state.players.get(client.sessionId)!;
-      const inputQueue = this.inputQueues.get(player);
-      inputQueue?.push(input);
+    this.onMessage<IPlayerInput>(0, (client, input) => {
+      this.inputQueue.addInput({ inputKey: 0, data: input }, client.sessionId);
+    });
+
+    this.onMessage<IProjectileSpawnInput>(1, (client, input) => {
+      this.inputQueue.addInput({ inputKey: 1, data: input }, client.sessionId);
     });
 
     let elapsedTime = 0;
@@ -39,15 +47,33 @@ export class MainRoom extends Room<GameState> {
     });
   }
 
-  public fixedTick() {
-    this.state.players.forEach(player => {
-      const inputQueue = this.inputQueues.get(player);
-      let input: IPlayerInput | undefined;
-
-      while ((input = <IPlayerInput>inputQueue?.shift())) {
-        playerStateModification(input, player);
+  private getInputWithKey<T extends KeyedInputData, K extends T['inputKey']>(
+    inputKey: K,
+    inputData: KeyedInputData[]
+  ): Extract<T, { inputKey: K }>['data'] | undefined {
+    for (let i = 0; i < inputData.length; i++) {
+      if (inputData[i].inputKey === inputKey) {
+        return <Extract<T, { inputKey: K }>['data']>inputData[i].data; // trust me bro
       }
-    });
+    }
+  }
+
+  public fixedTick() {
+    for (let i = 0; i < this.clientTicksPerServerTick; i++) {
+      for (const input of this.inputQueue.getNextInput(1)) {
+        const movementInput = this.getInputWithKey(0, input.input);
+        if (movementInput !== undefined) {
+          const playerState = this.state.players.get(input.clientId);
+          if (playerState) {
+            playerStateModification(movementInput, playerState);
+          }
+        }
+      }
+
+      // Run server sims
+    }
+
+    this.broadcastPatch();
   }
 
   private addStateInstance(
@@ -56,13 +82,10 @@ export class MainRoom extends Room<GameState> {
     state: Schema
   ) {
     stateList.set(sessionId, state);
-    this.inputQueues.set(state, new Queue());
   }
 
   private removeStateInstance(sessionId: string, stateList: MapSchema) {
-    const state = stateList.get(sessionId);
     stateList.delete(sessionId);
-    this.inputQueues.delete(state);
   }
 
   public onJoin(client: Client) {

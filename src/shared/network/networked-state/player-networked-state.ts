@@ -23,10 +23,12 @@ export class PlayerState extends Schema implements IPlayerState {
   @type('number') public x: number = 0;
   @type('number') public y: number = 0;
   @type('number') public relativeMouseAngle: number = 0;
-  @type('number') public tick: number = 0;
+  @type('number') public clientTick: number = 0;
 }
 
 const velocity = 2;
+export const wandPivotOffset = { x: -13, y: 2 };
+export const wandEffectiveLength = 32;
 export const playerStateModification = (
   input: IPlayerInput,
   state: IPlayerState
@@ -44,7 +46,7 @@ export const playerStateModification = (
   }
 
   state.relativeMouseAngle = input.relativeMouseAngle;
-  state.tick = input.tick;
+  state.clientTick = input.clientTick;
 };
 
 export type PlayerNetworkedStateBundle = NetworkedStateBundle<

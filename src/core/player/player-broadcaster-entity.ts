@@ -9,7 +9,7 @@ import {
   playerStateModification,
 } from '../../shared/network/networked-state/player-networked-state';
 import { Destroyable } from '../../shared/models/destroyable';
-import { ObjectQueue } from '../../shared/util/object-collection-buffer';
+import { ObjectQueue } from '../../shared/util/object-queue';
 import { InputHandler } from '../../shared/models/input-handler';
 import { Rotatable } from '../../shared/models/rotatable';
 
@@ -23,7 +23,7 @@ export class PlayerInputHandler implements InputHandler<IPlayerInput> {
     right: false,
     up: false,
     down: false,
-    tick: 0,
+    clientTick: 0,
     relativeMouseAngle: 0,
   };
 
@@ -60,7 +60,7 @@ export class PlayerInputHandler implements InputHandler<IPlayerInput> {
     this.playerInput.relativeMouseAngle =
       (360 / (2 * Math.PI)) * Math.atan2(dy, dx);
 
-    this.playerInput.tick = currentTick;
+    this.playerInput.clientTick = currentTick;
 
     if (this.keepInputHistory) this.playerInputBuffer.add(this.playerInput);
 
@@ -92,7 +92,7 @@ export class PlayerBroadcasterEntity
       public set y(value) {
         parentThis.playerEntity.y = value;
       }
-      public tick = 0;
+      public clientTick = 0;
       public _relativeMouseAngle = 0;
       public set relativeMouseAngle(value: number) {
         this._relativeMouseAngle = value;
@@ -128,7 +128,7 @@ export class PlayerBroadcasterEntity
     let historicalInput: IPlayerInput | undefined;
 
     while ((historicalInput = this.playerInputHandler.getBuffer().shift())) {
-      if (stateRef.tick === historicalInput.tick) {
+      if (stateRef.clientTick === historicalInput.clientTick) {
         Object.assign(this.state, stateRef);
         for (const v of this.playerInputHandler.getBuffer().iterable()) {
           playerStateModification(v, this.state);
@@ -143,5 +143,10 @@ export class PlayerBroadcasterEntity
       this.playerInputHandler.getCurrentInput(),
       this.state
     );
+
+    // this.scene.add.graphics().strokeCircle(
+    //   (16 * Math.cos(Math.PI * 2 * ((this.state.relativeMouseAngle + 360) % 360)/360)) + this.state.x + wandPivotOffset.x,
+    //   (16 * Math.sin(Math.PI * 2 * ((this.state.relativeMouseAngle + 360) % 360)/360)) + this.state.y + wandPivotOffset.y,
+    //   1);
   }
 }
