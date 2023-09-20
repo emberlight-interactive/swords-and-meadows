@@ -1,4 +1,4 @@
-import { ObjectQueue } from '../util/object-collection-buffer';
+import { ObjectQueue } from '../util/object-queue';
 
 export interface InputHandler<T extends object> {
   getBuffer(): ObjectQueue<T>;
