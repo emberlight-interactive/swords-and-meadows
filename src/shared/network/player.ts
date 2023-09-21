@@ -14,7 +14,7 @@ export interface IPlayerState extends InputAndStateSync {
   relativeMouseAngle: number;
 }
 
-export const playerInputKey = 0;
+export const playerInputKey = 0 as const;
 
 const velocity = 2;
 export const wandPivotOffset = { x: -13, y: 2 };
