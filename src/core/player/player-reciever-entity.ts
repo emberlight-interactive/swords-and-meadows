@@ -2,7 +2,7 @@ import { Math } from 'phaser';
 import { Destroyable } from '~/shared/models/destroyable';
 import { XYTransformable } from '~/shared/models/x-y-transformable';
 import { env } from '../../shared/env/env';
-import { IPlayerState } from '~/shared/network/networked-state/player-networked-state';
+import { IPlayerState } from '~/shared/network/player';
 import { Rotatable } from '~/shared/models/rotatable';
 import { IntegerDeltaCalculator } from '../../shared/util/integer-delta-calculator';
 

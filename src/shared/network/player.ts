@@ -1,9 +1,4 @@
-import { Schema, type } from '@colyseus/schema';
-import {
-  InputAndStateSync,
-  NetworkCommKey,
-  NetworkedStateBundle,
-} from './networked-state';
+import { InputAndStateSync } from './input-and-state-sync';
 
 export interface IPlayerInput extends InputAndStateSync {
   left: boolean;
@@ -19,12 +14,7 @@ export interface IPlayerState extends InputAndStateSync {
   relativeMouseAngle: number;
 }
 
-export class PlayerState extends Schema implements IPlayerState {
-  @type('number') public x: number = 0;
-  @type('number') public y: number = 0;
-  @type('number') public relativeMouseAngle: number = 0;
-  @type('number') public clientTick: number = 0;
-}
+export const playerInputKey = 0;
 
 const velocity = 2;
 export const wandPivotOffset = { x: -13, y: 2 };
@@ -48,9 +38,3 @@ export const playerStateModification = (
   state.relativeMouseAngle = input.relativeMouseAngle;
   state.clientTick = input.clientTick;
 };
-
-export type PlayerNetworkedStateBundle = NetworkedStateBundle<
-  IPlayerInput,
-  NetworkCommKey.PlayerState,
-  IPlayerState
->;
