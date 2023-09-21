@@ -28,7 +28,7 @@ export class PlayerState extends Schema implements IPlayerState {
 
 const velocity = 2;
 export const wandPivotOffset = { x: -13, y: 2 };
-export const wandEffectiveLength = 32;
+export const wandStandardLength = 32;
 export const playerStateModification = (
   input: IPlayerInput,
   state: IPlayerState

@@ -1,10 +1,8 @@
 import { Scene } from 'phaser';
 import { XYTransformable } from '../../shared/models/x-y-transformable';
-import { NetworkBroadcastEntity } from '../../shared/network/client-network-manager';
 import { NetworkCommKey } from '../../shared/network/networked-state/networked-state';
 import {
   IPlayerInput,
-  PlayerNetworkedStateBundle,
   IPlayerState,
   playerStateModification,
 } from '../../shared/network/networked-state/player-networked-state';
@@ -72,9 +70,7 @@ export class PlayerInputHandler implements InputHandler<IPlayerInput> {
   }
 }
 
-export class PlayerBroadcasterEntity
-  implements NetworkBroadcastEntity<PlayerNetworkedStateBundle>
-{
+export class PlayerBroadcasterEntity {
   public readonly networkCommKey = NetworkCommKey.PlayerState;
   private playerInputHandler: InputHandler<IPlayerInput>;
 
@@ -143,10 +139,5 @@ export class PlayerBroadcasterEntity
       this.playerInputHandler.getCurrentInput(),
       this.state
     );
-
-    // this.scene.add.graphics().strokeCircle(
-    //   (16 * Math.cos(Math.PI * 2 * ((this.state.relativeMouseAngle + 360) % 360)/360)) + this.state.x + wandPivotOffset.x,
-    //   (16 * Math.sin(Math.PI * 2 * ((this.state.relativeMouseAngle + 360) % 360)/360)) + this.state.y + wandPivotOffset.y,
-    //   1);
   }
 }
