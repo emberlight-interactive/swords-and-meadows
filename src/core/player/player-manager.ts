@@ -1,6 +1,6 @@
 import { PlayerBroadcasterEntity } from './player-broadcaster-entity';
 import { PlayerRecieverEntity } from './player-reciever-entity';
-import { IPlayerState } from '../../shared/network/networked-state/player-networked-state';
+import { IPlayerState, playerInputKey } from '../../shared/network/player';
 import { XYTransformable } from '../../shared/models/x-y-transformable';
 import { Rotatable } from '../../shared/models/rotatable';
 import { Destroyable } from '../../shared/models/destroyable';
@@ -60,7 +60,7 @@ export class PlayerManager {
   public tick(currTick: number) {
     if (this.playerMovementBroadcaster) {
       this.serverMessenger.send(
-        this.playerMovementBroadcaster.networkCommKey,
+        playerInputKey,
         this.playerMovementBroadcaster.getCurrentInput(currTick)
       );
       this.playerMovementBroadcaster.tick();

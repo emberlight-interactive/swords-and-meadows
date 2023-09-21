@@ -1,6 +1,5 @@
 import { Scene } from 'phaser';
 import { PlayerEntity } from './core/player-entity/player-entity';
-import type { GameState } from './shared/network/networked-state/networked-state';
 import { gameConfig } from './shared/game-config';
 import { WandEntity } from './core/wand-entity/wand-entity';
 import { Client, Room } from 'colyseus.js';
@@ -11,6 +10,7 @@ import { XYTransformable } from './shared/models/x-y-transformable';
 import { ProjectileSpawnerBroadcaster } from './core/projectile/projectile-spawner-broadcaster';
 import { ProjectileManager } from './core/projectile/projectile-manager';
 import { ProjectileEntity } from './core/projectile-entity/projectile-entity';
+import { INetworkedState } from './shared/network/networked-state';
 
 export default class Index extends Scene {
   private fixedTickCallback: Function;
@@ -19,7 +19,7 @@ export default class Index extends Scene {
 
   private debugFPS!: Phaser.GameObjects.Text;
 
-  private room?: Room<GameState>;
+  private room?: Room<INetworkedState>;
   private playerManager!: PlayerManager;
   private projectileManager!: ProjectileManager;
   private projectileSpawnerBroadcaster!: ProjectileSpawnerBroadcaster;

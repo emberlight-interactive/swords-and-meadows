@@ -1,9 +1,9 @@
-import { IPlayerInput } from './networked-state/player-networked-state';
-import { IProjectileSpawnInput } from './networked-state/projectile-networked-state';
+import { IPlayerInput, playerInputKey } from './player';
+import { IProjectileSpawnInput, projectileInputKey } from './projectile';
 
 export type KeyedInputData =
-  | { inputKey: 0; data: IPlayerInput }
-  | { inputKey: 1; data: IProjectileSpawnInput };
+  | { inputKey: typeof playerInputKey; data: IPlayerInput }
+  | { inputKey: typeof projectileInputKey; data: IProjectileSpawnInput };
 
 export type InputNode = { input: KeyedInputData[] } & {
   clientId: string;

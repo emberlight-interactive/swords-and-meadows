@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { IProjectileSpawnInput } from '../../shared/network/networked-state/projectile-networked-state';
+import { IProjectileSpawnInput } from '../../shared/network/projectile';
 import { ServerMessenger } from '../../shared/models/server-messenger';
 
 export class ProjectileSpawnerBroadcaster {

@@ -3,11 +3,9 @@ import {
   IPlayerState,
   wandStandardLength,
   wandPivotOffset,
-} from '../../../shared/network/networked-state/player-networked-state';
-import {
-  IProjectileState,
-  ProjectileState,
-} from '../../../shared/network/networked-state/projectile-networked-state';
+} from '../../../shared/network/player';
+import { IProjectileState } from '../../../shared/network/projectile';
+import { ProjectileState } from '../state/projectile-state';
 
 export function addProjectile(
   projectileMap: Map<string, IProjectileState>,

@@ -1,20 +1,17 @@
 import { Room, Client, Server } from 'colyseus';
-import { GameState } from './shared/network/networked-state/networked-state';
 import { env } from './shared/env/env';
-import {
-  IPlayerInput,
-  PlayerState,
-  playerStateModification,
-} from './shared/network/networked-state/player-networked-state';
+import { IPlayerInput, playerStateModification } from './shared/network/player';
 import { monitor } from '@colyseus/monitor';
 import { Schema, MapSchema } from '@colyseus/schema';
 import { matchMaker } from '@colyseus/core';
-import { IProjectileSpawnInput } from './shared/network/networked-state/projectile-networked-state';
+import { IProjectileSpawnInput } from './shared/network//projectile';
 import { InputQueue, KeyedInputData } from './shared/network/input-queue';
 import { addProjectile } from './core/server/projectile/add-projectile';
 import { moveProjectiles } from './core/server/projectile/move-projectiles';
+import { NetworkedState } from './core/server/state/networked-state';
+import { PlayerState } from './core/server/state/player-state';
 
-export class MainRoom extends Room<GameState> {
+export class MainRoom extends Room<NetworkedState> {
   public fixedTimeStep = 1000 / env.serverTicksPerSecond;
   public clientTicksPerServerTick =
     env.clientTicksPerSecond / env.serverTicksPerSecond;
@@ -22,13 +19,10 @@ export class MainRoom extends Room<GameState> {
   private inputQueue = new InputQueue();
 
   public onCreate() {
-    this.setState(new GameState());
+    this.setState(new NetworkedState());
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.setPatchRate(null);
-
-    this.state.mapWidth = 800;
-    this.state.mapHeight = 600;
 
     this.onMessage<IPlayerInput>(0, (client, input) => {
       this.inputQueue.addInput({ inputKey: 0, data: input }, client.sessionId);
@@ -102,8 +96,8 @@ export class MainRoom extends Room<GameState> {
     console.log(client.sessionId, 'joined!');
 
     const player = new PlayerState();
-    player.x = Math.random() * this.state.mapWidth;
-    player.y = Math.random() * this.state.mapHeight;
+    player.x = Math.random() * 800;
+    player.y = Math.random() * 600;
 
     this.addStateInstance(client.sessionId, this.state.players, player);
   }

@@ -1,4 +1,4 @@
-import { IProjectileState } from '../../shared/network/networked-state/projectile-networked-state';
+import { IProjectileState } from '../../shared/network/projectile';
 import { Synced } from '../../shared/models/synced';
 import { XYTransformable } from '../../shared/models/x-y-transformable';
 import { Rotatable } from '../../shared/models/rotatable';
@@ -39,3 +39,6 @@ export class ProjectileReciever implements Synced {
     this.projectileEntity.destroy();
   }
 }
+
+// Clean up old network system
+// Maybe we CAN predict projectiles? since the server fires them at the exact same time as the player

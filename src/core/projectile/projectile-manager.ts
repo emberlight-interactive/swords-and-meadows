@@ -1,4 +1,4 @@
-import { IProjectileState } from '../../shared/network/networked-state/projectile-networked-state';
+import { IProjectileState } from '../../shared/network/projectile';
 import { NetworkedMap } from '../../shared/models/networked-map';
 import { Destroyable } from '../../shared/models/destroyable';
 import { ProjectileReciever } from './projectile-reciever';

@@ -1,11 +1,10 @@
 import { Scene } from 'phaser';
 import { XYTransformable } from '../../shared/models/x-y-transformable';
-import { NetworkCommKey } from '../../shared/network/networked-state/networked-state';
 import {
   IPlayerInput,
   IPlayerState,
   playerStateModification,
-} from '../../shared/network/networked-state/player-networked-state';
+} from '../../shared/network/player';
 import { Destroyable } from '../../shared/models/destroyable';
 import { ObjectQueue } from '../../shared/util/object-queue';
 import { InputHandler } from '../../shared/models/input-handler';
@@ -71,7 +70,6 @@ export class PlayerInputHandler implements InputHandler<IPlayerInput> {
 }
 
 export class PlayerBroadcasterEntity {
-  public readonly networkCommKey = NetworkCommKey.PlayerState;
   private playerInputHandler: InputHandler<IPlayerInput>;
 
   private state: IPlayerState = ((parentThis: PlayerBroadcasterEntity) => {
