@@ -11,6 +11,8 @@ import { Schema, MapSchema } from '@colyseus/schema';
 import { matchMaker } from '@colyseus/core';
 import { IProjectileSpawnInput } from './shared/network/networked-state/projectile-networked-state';
 import { InputQueue, KeyedInputData } from './shared/network/input-queue';
+import { addProjectile } from './core/server/projectile/add-projectile';
+import { moveProjectiles } from './core/server/projectile/move-projectiles';
 
 export class MainRoom extends Room<GameState> {
   public fixedTimeStep = 1000 / env.serverTicksPerSecond;
@@ -68,8 +70,16 @@ export class MainRoom extends Room<GameState> {
             playerStateModification(movementInput, playerState);
           }
         }
+        const spawnProjectileInput = this.getInputWithKey(1, input.input);
+        if (spawnProjectileInput !== undefined) {
+          const playerState = this.state.players.get(input.clientId);
+          if (playerState) {
+            addProjectile(this.state.projectiles, playerState);
+          }
+        }
       }
 
+      moveProjectiles(this.state.projectiles);
       // Run server sims
     }
 
