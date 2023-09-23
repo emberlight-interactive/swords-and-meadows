@@ -11,6 +11,7 @@ import { ProjectileSpawnerBroadcaster } from './core/projectile/projectile-spawn
 import { ProjectileManager } from './core/projectile/projectile-manager';
 import { ProjectileEntity } from './core/projectile-entity/projectile-entity';
 import { INetworkedState } from './shared/network/networked-state';
+import { PlayerPositionIndex } from './core/player/player-position-index';
 
 export default class Index extends Scene {
   private fixedTickCallback: Function;
@@ -23,6 +24,7 @@ export default class Index extends Scene {
   private playerManager!: PlayerManager;
   private projectileManager!: ProjectileManager;
   private projectileSpawnerBroadcaster!: ProjectileSpawnerBroadcaster;
+  private playerPositionIndex!: PlayerPositionIndex;
 
   constructor(private fixedTickManager = new FixedTickManager()) {
     super('Index');
@@ -78,7 +80,9 @@ export default class Index extends Scene {
       this.projectileManager = new ProjectileManager(
         this.room.state.projectiles,
         (x: number, y: number, angle: number) =>
-          new ProjectileEntity(x, y, angle, this)
+          new ProjectileEntity(x, y, angle, this),
+        this.playerManager.getOtherPlayerEntityMap(),
+        this.room
       );
     }
   }
@@ -95,7 +99,7 @@ export default class Index extends Scene {
   private tick() {
     this.playerManager.tick(this.fixedTickManager.getTick());
     this.projectileSpawnerBroadcaster.tick(this.fixedTickManager.getTick());
-    this.projectileManager.tick();
+    this.projectileManager.tick(this.fixedTickManager.getTick());
   }
 }
 

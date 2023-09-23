@@ -9,7 +9,8 @@ import { ProjectileState } from '../state/projectile-state';
 
 export function addProjectile(
   projectileMap: Map<string, IProjectileState>,
-  playerState: IPlayerState
+  playerState: IPlayerState,
+  playerKey: string
 ) {
   const projectile = new ProjectileState();
   projectile.angle = playerState.relativeMouseAngle;
@@ -28,6 +29,8 @@ export function addProjectile(
       ) +
     playerState.y +
     wandPivotOffset.y;
+
+  projectile.owner = playerKey;
 
   projectileMap.set(crypto.randomBytes(5).toString('hex'), projectile);
 }

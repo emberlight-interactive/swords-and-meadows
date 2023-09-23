@@ -2,12 +2,13 @@ import { IProjectileState } from '../../shared/network/projectile';
 import { NetworkedMap } from '../../shared/models/networked-map';
 import { Destroyable } from '../../shared/models/destroyable';
 import { ProjectileReciever } from './projectile-reciever';
-import { Synced } from '../../shared/models/synced';
+import { ContextSynced } from '../../shared/models/synced';
 import { XYTransformable } from '../../shared/models/x-y-transformable';
 import { Rotatable } from '../../shared/models/rotatable';
+import { ServerMessenger } from '../../shared/models/server-messenger';
 
 export class ProjectileManager {
-  private projectiles = new Map<string, Synced & Destroyable>();
+  private projectiles = new Map<string, ContextSynced & Destroyable>();
 
   constructor(
     projectileMap: NetworkedMap<IProjectileState>,
@@ -16,14 +17,19 @@ export class ProjectileManager {
       x: number,
       y: number,
       angle: number
-    ) => XYTransformable & Rotatable & Destroyable
+    ) => XYTransformable & Rotatable & Destroyable,
+    playerEntityMap: Map<string, XYTransformable>,
+    serverMessenger: ServerMessenger
   ) {
     projectileMap.onAdd((state, key) => {
       this.projectiles.set(
         key,
         new ProjectileReciever(
           state,
-          projectileEntityFactory(state.x, state.y, state.angle)
+          key,
+          projectileEntityFactory(state.x, state.y, state.angle),
+          playerEntityMap,
+          serverMessenger
         )
       );
     });
@@ -35,9 +41,9 @@ export class ProjectileManager {
     });
   }
 
-  public tick() {
+  public tick(currTick: number) {
     for (const projectile of this.projectiles.values()) {
-      projectile.tick();
+      projectile.tick(currTick);
     }
   }
 }

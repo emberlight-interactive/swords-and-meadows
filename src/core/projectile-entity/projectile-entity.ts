@@ -22,6 +22,7 @@ export class ProjectileEntity
   }
 
   private sprite: Phaser.GameObjects.Sprite;
+  private graphic: Phaser.GameObjects.Graphics;
 
   public get x() {
     return this.sprite.x;
@@ -29,6 +30,7 @@ export class ProjectileEntity
 
   public set x(value) {
     this.sprite.x = value;
+    this.graphic.x = value;
   }
 
   public get y() {
@@ -37,6 +39,7 @@ export class ProjectileEntity
 
   public set y(value) {
     this.sprite.y = value;
+    this.graphic.y = value;
   }
 
   public set angle(value) {
@@ -54,8 +57,13 @@ export class ProjectileEntity
     private scene: Scene
   ) {
     this.sprite = this.scene.add.sprite(x, y, 'force-projectile');
+    this.sprite.setOrigin(0.75, 0.5);
     this.sprite.play('force-projectile');
     this.angle = angle;
+
+    this.graphic = this.scene.add.graphics({ fillStyle: { color: 0xff0000 } });
+    const circle = new Phaser.Geom.Circle(undefined, undefined, 7.5);
+    this.graphic.fillCircleShape(circle);
   }
 
   public destroy() {

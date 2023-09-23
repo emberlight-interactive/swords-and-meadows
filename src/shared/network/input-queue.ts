@@ -1,9 +1,15 @@
 import { IPlayerInput, playerInputKey } from './player';
-import { IProjectileSpawnInput, projectileInputKey } from './projectile';
+import {
+  IProjectileHitInput,
+  IProjectileSpawnInput,
+  projectileHitInputKey,
+  projectileInputKey,
+} from './projectile';
 
 export type KeyedInputData =
   | { inputKey: typeof playerInputKey; data: IPlayerInput }
-  | { inputKey: typeof projectileInputKey; data: IProjectileSpawnInput };
+  | { inputKey: typeof projectileInputKey; data: IProjectileSpawnInput }
+  | { inputKey: typeof projectileHitInputKey; data: IProjectileHitInput };
 
 export type InputNode = { input: KeyedInputData[] } & {
   clientId: string;

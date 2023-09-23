@@ -1,37 +1,44 @@
 import { Math } from 'phaser';
-import { Destroyable } from '~/shared/models/destroyable';
-import { XYTransformable } from '~/shared/models/x-y-transformable';
+import { Destroyable } from '../../shared/models/destroyable';
+import { XYTransformable } from '../../shared/models/x-y-transformable';
 import { env } from '../../shared/env/env';
-import { IPlayerState } from '~/shared/network/player';
-import { Rotatable } from '~/shared/models/rotatable';
-import { IntegerDeltaCalculator } from '../../shared/util/integer-delta-calculator';
+import {
+  IPlayerState,
+  PlayerLerpCalculator,
+} from '../../shared/network/player';
+import { Rotatable } from '../../shared/models/rotatable';
 
-export class PlayerRecieverEntity {
+export class PlayerRecieverEntity implements Readonly<XYTransformable> {
   private stateRef!: IPlayerState;
   public setState(stateRef: IPlayerState) {
     this.stateRef = stateRef;
   }
 
-  private clientTicksPerServerTick =
-    env.clientTicksPerSecond / env.serverTicksPerSecond;
+  private playerLerpCalculator: PlayerLerpCalculator;
 
-  private yDeltas: IntegerDeltaCalculator;
-  private xDeltas: IntegerDeltaCalculator;
+  public get x() {
+    return this.playerEntity.x;
+  }
+
+  public get y() {
+    return this.playerEntity.y;
+  }
 
   constructor(
     private playerEntity: XYTransformable & Destroyable,
     private playerWand: Rotatable & Destroyable
   ) {
-    this.xDeltas = new IntegerDeltaCalculator(this.playerEntity.x);
-    this.yDeltas = new IntegerDeltaCalculator(this.playerEntity.y);
+    this.playerLerpCalculator = new PlayerLerpCalculator(
+      this.playerEntity.x,
+      this.playerEntity.y
+    );
   }
 
   public tick() {
-    this.xDeltas.updateDeltas(this.stateRef.x, this.clientTicksPerServerTick);
-    this.yDeltas.updateDeltas(this.stateRef.y, this.clientTicksPerServerTick);
+    this.playerLerpCalculator.addPosition(this.stateRef);
 
-    this.playerEntity.x -= this.xDeltas.deltaQueue.shift() || 0;
-    this.playerEntity.y -= this.yDeltas.deltaQueue.shift() || 0;
+    this.playerEntity.x -= this.playerLerpCalculator.getNextXDelta();
+    this.playerEntity.y -= this.playerLerpCalculator.getNextYDelta();
 
     this.playerWand.angle = Math.RadToDeg(
       Phaser.Math.Angle.RotateTo(

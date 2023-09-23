@@ -1,15 +1,30 @@
 import { Room, Client, Server } from 'colyseus';
 import { env } from './shared/env/env';
-import { IPlayerInput, playerStateModification } from './shared/network/player';
+import {
+  IPlayerInput,
+  playerInputKey,
+  playerStateModification,
+} from './shared/network/player';
 import { monitor } from '@colyseus/monitor';
 import { Schema, MapSchema } from '@colyseus/schema';
 import { matchMaker } from '@colyseus/core';
-import { IProjectileSpawnInput } from './shared/network//projectile';
+import {
+  IProjectileHitInput,
+  IProjectileSpawnInput,
+  projectileHitInputKey,
+  projectileInputKey,
+} from './shared/network//projectile';
 import { InputQueue, KeyedInputData } from './shared/network/input-queue';
 import { addProjectile } from './core/server/projectile/add-projectile';
-import { moveProjectiles } from './core/server/projectile/move-projectiles';
+import {
+  moveProjectile,
+  moveProjectiles,
+} from './core/server/projectile/move-projectiles';
 import { NetworkedState } from './core/server/state/networked-state';
 import { PlayerState } from './core/server/state/player-state';
+import { XYTransformable } from './shared/models/x-y-transformable';
+import { didProjectileHit } from './core/server/projectile/determine-projectile-hit';
+import { Rotatable } from './shared/models/rotatable';
 
 export class MainRoom extends Room<NetworkedState> {
   public fixedTimeStep = 1000 / env.serverTicksPerSecond;
@@ -17,19 +32,26 @@ export class MainRoom extends Room<NetworkedState> {
     env.clientTicksPerSecond / env.serverTicksPerSecond;
 
   private inputQueue = new InputQueue();
+  private playerPositionHistory = new Map<string, XYTransformable[]>();
 
   public onCreate() {
     this.setState(new NetworkedState());
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.setPatchRate(null);
+    // this.autoDispose = false;
 
+    /** @todo: Spamming server messages causes braodcasted server changes to lag behind */
     this.onMessage<IPlayerInput>(0, (client, input) => {
       this.inputQueue.addInput({ inputKey: 0, data: input }, client.sessionId);
     });
 
     this.onMessage<IProjectileSpawnInput>(1, (client, input) => {
       this.inputQueue.addInput({ inputKey: 1, data: input }, client.sessionId);
+    });
+
+    this.onMessage<IProjectileHitInput>(2, (client, input) => {
+      this.inputQueue.addInput({ inputKey: 2, data: input }, client.sessionId);
     });
 
     let elapsedTime = 0;
@@ -57,27 +79,111 @@ export class MainRoom extends Room<NetworkedState> {
   public fixedTick() {
     for (let i = 0; i < this.clientTicksPerServerTick; i++) {
       for (const input of this.inputQueue.getNextInput(1)) {
-        const movementInput = this.getInputWithKey(0, input.input);
+        const movementInput = this.getInputWithKey(playerInputKey, input.input);
         if (movementInput !== undefined) {
           const playerState = this.state.players.get(input.clientId);
           if (playerState) {
             playerStateModification(movementInput, playerState);
           }
         }
-        const spawnProjectileInput = this.getInputWithKey(1, input.input);
+
+        const spawnProjectileInput = this.getInputWithKey(
+          projectileInputKey,
+          input.input
+        );
         if (spawnProjectileInput !== undefined) {
           const playerState = this.state.players.get(input.clientId);
           if (playerState) {
-            addProjectile(this.state.projectiles, playerState);
+            addProjectile(this.state.projectiles, playerState, input.clientId);
           }
         }
+
+        const projectileHitInput = this.getInputWithKey(
+          projectileHitInputKey,
+          input.input
+        );
+        if (projectileHitInput !== undefined) {
+          const otherPlayerPositionHistory = this.playerPositionHistory.get(
+            projectileHitInput.otherPlayerKey
+          );
+
+          const currProjectile = this.state.projectiles.get(
+            projectileHitInput.projectileKey
+          );
+
+          if (
+            otherPlayerPositionHistory &&
+            currProjectile &&
+            currProjectile.owner !== projectileHitInput.otherPlayerKey
+          ) {
+            const playerHit = didProjectileHit(
+              {
+                x: projectileHitInput.otherPlayerX,
+                y: projectileHitInput.otherPlayerY,
+              },
+              {
+                x: projectileHitInput.projectileX,
+                y: projectileHitInput.projectileY,
+              },
+              this.projectilePositionLastServerTick(currProjectile, i),
+              otherPlayerPositionHistory
+            );
+
+            if (playerHit) {
+              console.log('got rekt confirmed');
+            }
+          }
+        }
+
+        // bam - x, y of projectile, x, y player
+        // server rewinds until it finds a matching x, y position
+        // reverse lerp of player to two history points
+
+        // confirmDirectHit(projectile: {x, y}, projectileKey: string, otherPlayer: {x, y}, otherPlayerKey: string) w\ History
       }
 
       moveProjectiles(this.state.projectiles);
       // Run server sims
     }
 
+    this.addPlayerPositionsToHistory();
     this.broadcastPatch();
+  }
+
+  private addPlayerPositionsToHistory() {
+    this.state.players.forEach((player, key) => {
+      const playerPositionHistory = this.playerPositionHistory.get(key) || [];
+
+      if (playerPositionHistory.length === 0) {
+        this.playerPositionHistory.set(key, playerPositionHistory);
+      }
+
+      if (playerPositionHistory.length < 5) {
+        playerPositionHistory.push({ x: player.x, y: player.y });
+      } else {
+        const ancientPosition = playerPositionHistory.shift()!;
+        ancientPosition.x = player.x;
+        ancientPosition.y = player.y;
+        playerPositionHistory.push(ancientPosition);
+      }
+    });
+  }
+
+  private projectilePositionLastServerTick(
+    projectile: XYTransformable & Rotatable,
+    serverTickOffset: number
+  ) {
+    const rewindableProjectile = {
+      x: projectile.x,
+      y: projectile.y,
+      angle: projectile.angle,
+    };
+
+    for (let i = serverTickOffset; i > 0; i--) {
+      moveProjectile(rewindableProjectile, true);
+    }
+
+    return rewindableProjectile;
   }
 
   private addStateInstance(
