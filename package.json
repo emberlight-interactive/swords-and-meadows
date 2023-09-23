@@ -21,7 +21,7 @@
     "postbuild-server": "copyfiles package.json package-lock.json dist/server",
     "build-client": "webpack --mode=production --node-env production && phaser-asset-pack-hashing -r dist/client",
     "lint": "eslint . --ext .ts",
-    "test":"jest"
+    "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "^29.5.5",

@@ -17,8 +17,8 @@ export class PlayerManager {
     private clientId: string,
     private playerMap: NetworkedMap<IPlayerState>,
     private serverMessenger: ServerMessenger,
-    private wandFactory: () => XYTransformable & Rotatable & Destroyable,
-    private playerEntityFactory: (
+    wandFactory: () => XYTransformable & Rotatable & Destroyable,
+    playerEntityFactory: (
       x: number,
       y: number,
       tool: XYTransformable
@@ -29,7 +29,7 @@ export class PlayerManager {
         const wand = wandFactory();
         this.playerMovementBroadcaster = new PlayerBroadcasterEntity(
           this.scene,
-          this.playerEntityFactory(state.x, state.y, wand),
+          playerEntityFactory(state.x, state.y, wand),
           wand
         );
 

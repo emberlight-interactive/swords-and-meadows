@@ -10,6 +10,7 @@ import { addProjectile } from './core/server/projectile/add-projectile';
 import { moveProjectiles } from './core/server/projectile/move-projectiles';
 import { NetworkedState } from './core/server/state/networked-state';
 import { PlayerState } from './core/server/state/player-state';
+import { detectProjectileCollision } from './core/server/projectile/detect-collision';
 
 export class MainRoom extends Room<NetworkedState> {
   public fixedTimeStep = 1000 / env.serverTicksPerSecond;
@@ -23,7 +24,9 @@ export class MainRoom extends Room<NetworkedState> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.setPatchRate(null);
+    // this.autoDispose = false;
 
+    /** @todo: Spamming server messages causes braodcasted server changes to lag behind */
     this.onMessage<IPlayerInput>(0, (client, input) => {
       this.inputQueue.addInput({ inputKey: 0, data: input }, client.sessionId);
     });
@@ -68,13 +71,13 @@ export class MainRoom extends Room<NetworkedState> {
         if (spawnProjectileInput !== undefined) {
           const playerState = this.state.players.get(input.clientId);
           if (playerState) {
-            addProjectile(this.state.projectiles, playerState);
+            addProjectile(this.state.projectiles, playerState, input.clientId);
           }
         }
       }
 
       moveProjectiles(this.state.projectiles);
-      // Run server sims
+      detectProjectileCollision(this.state.projectiles, this.state.players);
     }
 
     this.broadcastPatch();

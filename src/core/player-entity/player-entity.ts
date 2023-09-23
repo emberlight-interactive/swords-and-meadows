@@ -4,7 +4,7 @@ import { Destroyable } from '~/shared/models/destroyable';
 import greyWizard from '../../shared/assets/grey-wizard.png';
 
 export class PlayerEntity implements XYTransformable, Destroyable {
-  private player: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
+  private player: Phaser.GameObjects.Sprite;
   private anchorOneOffset = { x: -13, y: 2 };
 
   public static preload(load: Phaser.Loader.LoaderPlugin) {
@@ -35,7 +35,7 @@ export class PlayerEntity implements XYTransformable, Destroyable {
     private tool: XYTransformable,
     private scene: Scene
   ) {
-    this.player = this.scene.physics.add.image(x, y, 'player');
+    this.player = this.scene.add.sprite(x, y, 'player');
     this.updateToolPosition();
   }
 

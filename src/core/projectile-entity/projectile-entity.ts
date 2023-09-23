@@ -54,6 +54,7 @@ export class ProjectileEntity
     private scene: Scene
   ) {
     this.sprite = this.scene.add.sprite(x, y, 'force-projectile');
+    this.sprite.setOrigin(0.75, 0.5);
     this.sprite.play('force-projectile');
     this.angle = angle;
   }
