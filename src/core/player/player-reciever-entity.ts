@@ -5,6 +5,7 @@ import { env } from '../../shared/env/env';
 import { IPlayerState } from '~/shared/network/player';
 import { Rotatable } from '~/shared/models/rotatable';
 import { IntegerDeltaCalculator } from '../../shared/util/integer-delta-calculator';
+import { HealthTrackable } from '../../shared/models/health-trackable';
 
 export class PlayerRecieverEntity {
   private stateRef!: IPlayerState;
@@ -19,7 +20,7 @@ export class PlayerRecieverEntity {
   private xDeltas: IntegerDeltaCalculator;
 
   constructor(
-    private playerEntity: XYTransformable & Destroyable,
+    private playerEntity: XYTransformable & Destroyable & HealthTrackable,
     private playerWand: Rotatable & Destroyable
   ) {
     this.xDeltas = new IntegerDeltaCalculator(this.playerEntity.x);
@@ -32,6 +33,7 @@ export class PlayerRecieverEntity {
 
     this.playerEntity.x -= this.xDeltas.deltaQueue.shift() || 0;
     this.playerEntity.y -= this.yDeltas.deltaQueue.shift() || 0;
+    this.playerEntity.health = this.stateRef.health;
 
     this.playerWand.angle = Math.RadToDeg(
       Phaser.Math.Angle.RotateTo(

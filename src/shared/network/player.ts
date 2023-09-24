@@ -1,3 +1,6 @@
+import { HealthTrackable } from '../models/health-trackable';
+import { PointerTrackable } from '../models/pointer-trackable';
+import { XYTransformable } from '../models/x-y-transformable';
 import { InputAndStateSync } from './input-and-state-sync';
 
 export interface IPlayerInput extends InputAndStateSync {
@@ -8,11 +11,11 @@ export interface IPlayerInput extends InputAndStateSync {
   relativeMouseAngle: number;
 }
 
-export interface IPlayerState extends InputAndStateSync {
-  x: number;
-  y: number;
-  relativeMouseAngle: number;
-}
+export interface IPlayerState
+  extends InputAndStateSync,
+    XYTransformable,
+    PointerTrackable,
+    HealthTrackable {}
 
 export const playerInputKey = 0 as const;
 
@@ -20,9 +23,10 @@ const velocity = 2;
 export const wandPivotOffset = { x: -13, y: 2 };
 export const wandStandardLength = 32;
 export const playerProjectileColliderDimensions = { w: 24, h: 40 };
+export const playerDefaultHealth = 100;
 export const playerStateModification = (
   input: IPlayerInput,
-  state: IPlayerState
+  state: InputAndStateSync & XYTransformable & PointerTrackable
 ) => {
   if (input.left) {
     state.x -= velocity;

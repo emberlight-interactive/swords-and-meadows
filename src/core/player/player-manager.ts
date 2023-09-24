@@ -7,6 +7,7 @@ import { Destroyable } from '../../shared/models/destroyable';
 import { Scene } from 'phaser';
 import { ServerMessenger } from '../../shared/models/server-messenger';
 import { NetworkedMap } from '../../shared/models/networked-map';
+import { HealthTrackable } from '../../shared/models/health-trackable';
 
 export class PlayerManager {
   private playerMovementBroadcaster?: PlayerBroadcasterEntity;
@@ -22,7 +23,7 @@ export class PlayerManager {
       x: number,
       y: number,
       tool: XYTransformable
-    ) => XYTransformable & Destroyable
+    ) => XYTransformable & Destroyable & HealthTrackable
   ) {
     this.playerMap.onAdd((state, sessionId) => {
       if (sessionId === this.clientId) {

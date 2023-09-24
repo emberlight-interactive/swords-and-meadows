@@ -9,6 +9,7 @@ import { Destroyable } from '../../shared/models/destroyable';
 import { ObjectQueue } from '../../shared/util/object-queue';
 import { InputHandler } from '../../shared/models/input-handler';
 import { Rotatable } from '../../shared/models/rotatable';
+import { HealthTrackable } from '../../shared/models/health-trackable';
 
 type Key = Phaser.Input.Keyboard.Key;
 
@@ -86,6 +87,12 @@ export class PlayerBroadcasterEntity {
       public set y(value) {
         parentThis.playerEntity.y = value;
       }
+      public set health(value) {
+        parentThis.playerEntity.health = value;
+      }
+      public get health() {
+        return parentThis.playerEntity.health;
+      }
       public clientTick = 0;
       public _relativeMouseAngle = 0;
       public set relativeMouseAngle(value: number) {
@@ -100,7 +107,7 @@ export class PlayerBroadcasterEntity {
 
   constructor(
     private scene: Scene,
-    private playerEntity: XYTransformable & Destroyable,
+    private playerEntity: XYTransformable & Destroyable & HealthTrackable,
     private playerWand: XYTransformable & Rotatable & Destroyable,
     playerInputHandler?: InputHandler<IPlayerInput>
   ) {
@@ -120,6 +127,8 @@ export class PlayerBroadcasterEntity {
 
   public reconcileState(stateRef: IPlayerState) {
     let historicalInput: IPlayerInput | undefined;
+
+    this.state.health = stateRef.health;
 
     while ((historicalInput = this.playerInputHandler.getBuffer().shift())) {
       if (stateRef.clientTick === historicalInput.clientTick) {

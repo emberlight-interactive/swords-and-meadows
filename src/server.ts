@@ -77,7 +77,14 @@ export class MainRoom extends Room<NetworkedState> {
       }
 
       moveProjectiles(this.state.projectiles);
-      detectProjectileCollision(this.state.projectiles, this.state.players);
+      detectProjectileCollision(
+        this.state.projectiles,
+        this.state.players,
+        (projectileKey: string, playerKey: string) => {
+          this.state.projectiles.delete(projectileKey);
+          this.state.players.get(playerKey)!.health -= 10;
+        }
+      );
     }
 
     this.broadcastPatch();

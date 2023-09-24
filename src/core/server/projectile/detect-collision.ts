@@ -1,17 +1,14 @@
-import {
-  IPlayerState,
-  playerProjectileColliderDimensions,
-} from '../../../shared/network/player';
-import {
-  IProjectileState,
-  projectileRadius,
-} from '../../../shared/network/projectile';
+import { OwnershipTrackable } from '../../../shared/models/ownership-trackable';
+import { XYTransformable } from '../../../shared/models/x-y-transformable';
+import { playerProjectileColliderDimensions } from '../../../shared/network/player';
+import { projectileRadius } from '../../../shared/network/projectile';
 import { circleRectCollision } from '../../../shared/util/collision-detection';
 
 /** @todo: O(n^2) CRINGE, I WANT TO DIE AND SO WILL THE SERVER */
 export function detectProjectileCollision(
-  projectileMap: Map<string, IProjectileState>,
-  playerMap: Map<string, IPlayerState>
+  projectileMap: Map<string, XYTransformable & OwnershipTrackable>,
+  playerMap: Map<string, XYTransformable>,
+  callback: (projectileKey: string, playerKey: string) => void
 ) {
   projectileMap.forEach((projectile, projectileKey) => {
     playerMap.forEach((player, playerKey) => {
@@ -32,7 +29,7 @@ export function detectProjectileCollision(
           }
         )
       ) {
-        projectileMap.delete(projectileKey);
+        callback(projectileKey, playerKey);
       }
     });
   });

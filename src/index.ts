@@ -19,6 +19,7 @@ export default class Index extends Scene {
 
   private debugFPS!: Phaser.GameObjects.Text;
 
+  private client!: Client;
   private room?: Room<INetworkedState>;
   private playerManager!: PlayerManager;
   private projectileManager!: ProjectileManager;
@@ -38,14 +39,14 @@ export default class Index extends Scene {
   public async connect() {
     console.log('Trying to connect with the server...');
     this.connectionStatus = 'connecting';
-    const client = new Client({
+    this.client = new Client({
       secure: env.serverSSL,
       hostname: env.serverHostname,
       port: env.serverPort,
     });
 
     try {
-      this.room = await client.joinOrCreate(env.serverRoomName, {});
+      this.room = await this.client.joinOrCreate(env.serverRoomName, {});
       this.connectionStatus = 'connected';
     } catch (e) {
       console.error('Failed to connect');

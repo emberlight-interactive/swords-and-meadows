@@ -14,4 +14,8 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     autoCenter: Phaser.Scale.Center.CENTER_BOTH,
   },
   antialias: false,
+  parent: 'body',
+  dom: {
+    createContainer: true,
+  },
 };
