@@ -25,6 +25,7 @@ export class PlayerRecieverEntity {
   ) {
     this.xDeltas = new IntegerDeltaCalculator(this.playerEntity.x);
     this.yDeltas = new IntegerDeltaCalculator(this.playerEntity.y);
+    this.playerEntity.health = 0;
   }
 
   public tick() {
@@ -33,7 +34,6 @@ export class PlayerRecieverEntity {
 
     this.playerEntity.x -= this.xDeltas.deltaQueue.shift() || 0;
     this.playerEntity.y -= this.yDeltas.deltaQueue.shift() || 0;
-    this.playerEntity.health = this.stateRef.health;
 
     this.playerWand.angle = Math.RadToDeg(
       Phaser.Math.Angle.RotateTo(
