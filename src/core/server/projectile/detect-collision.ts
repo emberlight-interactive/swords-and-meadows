@@ -1,12 +1,19 @@
 import { OwnershipTrackable } from '../../../shared/models/ownership-trackable';
 import { XYTransformable } from '../../../shared/models/x-y-transformable';
 import { playerProjectileColliderDimensions } from '../../../shared/network/player';
-import { projectileRadius } from '../../../shared/network/projectile';
+import {
+  ProjectileType,
+  ProjectileTypeTrackable,
+  projectileRadius,
+} from '../../../shared/network/projectile';
 import { circleRectCollision } from '../../../shared/util/collision-detection';
 
 /** @todo: O(n^2) CRINGE, I WANT TO DIE AND SO WILL THE SERVER */
 export function detectProjectileCollision(
-  projectileMap: Map<string, XYTransformable & OwnershipTrackable>,
+  projectileMap: Map<
+    string,
+    XYTransformable & OwnershipTrackable & ProjectileTypeTrackable
+  >,
   playerMap: Map<string, XYTransformable>,
   callback: (projectileKey: string, playerKey: string) => void
 ) {
@@ -14,6 +21,7 @@ export function detectProjectileCollision(
     playerMap.forEach((player, playerKey) => {
       if (
         projectile.owner !== playerKey &&
+        projectile.type !== ProjectileType.Radius &&
         /** @todo: maybe instead of advanced matamatics we just >x >y ness */
         circleRectCollision(
           {

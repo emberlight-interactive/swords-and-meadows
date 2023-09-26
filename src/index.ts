@@ -11,6 +11,9 @@ import { ProjectileSpawnerBroadcaster } from './core/projectile/projectile-spawn
 import { ProjectileManager } from './core/projectile/projectile-manager';
 import { ProjectileEntity } from './core/projectile-entity/projectile-entity';
 import { INetworkedState } from './shared/network/networked-state';
+import { ExplosionEntity } from './core/explosion-entity/explosion-entity';
+import { ExplosionManager } from './core/explosion/explosion-manager';
+import { ExplosionType } from './shared/network/explosion';
 
 export default class Index extends Scene {
   private fixedTickCallback: Function;
@@ -24,6 +27,7 @@ export default class Index extends Scene {
   private playerManager!: PlayerManager;
   private projectileManager!: ProjectileManager;
   private projectileSpawnerBroadcaster!: ProjectileSpawnerBroadcaster;
+  private explosionManager!: ExplosionManager;
 
   constructor(private fixedTickManager = new FixedTickManager()) {
     super('Index');
@@ -34,6 +38,7 @@ export default class Index extends Scene {
     PlayerEntity.preload(this.load);
     WandEntity.preload(this.load);
     ProjectileEntity.preload(this.load);
+    ExplosionEntity.preload(this.load);
   }
 
   public async connect() {
@@ -60,6 +65,7 @@ export default class Index extends Scene {
 
     if (this.room) {
       ProjectileEntity.init(this);
+      ExplosionEntity.init(this);
 
       this.playerManager = new PlayerManager(
         this,
@@ -80,6 +86,12 @@ export default class Index extends Scene {
         this.room.state.projectiles,
         (x: number, y: number, angle: number) =>
           new ProjectileEntity(x, y, angle, this)
+      );
+
+      this.explosionManager = new ExplosionManager(
+        this.room.state.explosions,
+        (x: number, y: number, explosionType: ExplosionType) =>
+          new ExplosionEntity(x, y, explosionType, this)
       );
     }
   }

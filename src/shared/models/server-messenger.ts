@@ -1,3 +1,3 @@
 export interface ServerMessenger {
-  send: (type: string | number, message: object) => void;
+  send: <T = object>(type: string | number, message: T) => void;
 }

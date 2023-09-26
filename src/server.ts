@@ -4,13 +4,20 @@ import { IPlayerInput, playerStateModification } from './shared/network/player';
 import { monitor } from '@colyseus/monitor';
 import { Schema, MapSchema } from '@colyseus/schema';
 import { matchMaker } from '@colyseus/core';
-import { IProjectileSpawnInput } from './shared/network//projectile';
+import {
+  IProjectileSpawnInput,
+  ProjectileType,
+} from './shared/network//projectile';
 import { InputQueue, KeyedInputData } from './shared/network/input-queue';
 import { addProjectile } from './core/server/projectile/add-projectile';
 import { moveProjectiles } from './core/server/projectile/move-projectiles';
 import { NetworkedState } from './core/server/state/networked-state';
 import { PlayerState } from './core/server/state/player-state';
 import { detectProjectileCollision } from './core/server/projectile/detect-collision';
+import { ExplosionState } from './core/server/state/explosion-state';
+import { ExplosionType } from './shared/network/explosion';
+import crypto from 'crypto';
+import { ExplosionManager } from './core/server/explosion-manager/explosion-manager';
 
 export class MainRoom extends Room<NetworkedState> {
   public fixedTimeStep = 1000 / env.serverTicksPerSecond;
@@ -18,9 +25,12 @@ export class MainRoom extends Room<NetworkedState> {
     env.clientTicksPerSecond / env.serverTicksPerSecond;
 
   private inputQueue = new InputQueue();
+  private explosionManager!: ExplosionManager;
 
   public onCreate() {
     this.setState(new NetworkedState());
+    this.explosionManager = new ExplosionManager(this.state.players);
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.setPatchRate(null);
@@ -58,6 +68,8 @@ export class MainRoom extends Room<NetworkedState> {
   }
 
   public fixedTick() {
+    this.clearExplosions();
+
     for (let i = 0; i < this.clientTicksPerServerTick; i++) {
       for (const input of this.inputQueue.getNextInput(1)) {
         const movementInput = this.getInputWithKey(0, input.input);
@@ -71,12 +83,33 @@ export class MainRoom extends Room<NetworkedState> {
         if (spawnProjectileInput !== undefined) {
           const playerState = this.state.players.get(input.clientId);
           if (playerState) {
-            addProjectile(this.state.projectiles, playerState, input.clientId);
+            addProjectile(
+              spawnProjectileInput,
+              this.state.projectiles,
+              playerState,
+              input.clientId
+            );
           }
         }
       }
 
-      moveProjectiles(this.state.projectiles);
+      moveProjectiles(this.state.projectiles, (projectileKey, projectile) => {
+        this.state.projectiles.delete(projectileKey);
+        if (projectile.type === ProjectileType.Radius) {
+          const explosion = new ExplosionState();
+          explosion.x = projectile.desinationWorldX;
+          explosion.y = projectile.desinationWorldY;
+          explosion.explosionType = ExplosionType.FireExplosionOne;
+          explosion.owner = projectile.owner;
+
+          this.state.explosions.set(
+            crypto.randomBytes(5).toString('hex'),
+            explosion
+          );
+          this.explosionManager.addExplosion(explosion);
+        }
+      });
+
       detectProjectileCollision(
         this.state.projectiles,
         this.state.players,
@@ -85,9 +118,15 @@ export class MainRoom extends Room<NetworkedState> {
           this.state.players.get(playerKey)!.health -= 10;
         }
       );
+
+      this.explosionManager.processAddedExplosions();
     }
 
     this.broadcastPatch();
+  }
+
+  private clearExplosions() {
+    this.state.explosions.clear();
   }
 
   private addStateInstance(

@@ -73,6 +73,7 @@ export class PlayerEntity
 
   public destroy(): void {
     this.player.destroy();
+    this.playerName.destroy();
   }
 
   private renderNewHealthPercentage(healthPercentage: number) {

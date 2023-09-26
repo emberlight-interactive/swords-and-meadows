@@ -51,9 +51,9 @@ export class PlayerInputHandler implements InputHandler<IPlayerInput> {
     this.playerInput.down = this.keys.S.isDown;
 
     const dx =
-      this.scene.game.input.activePointer.x - this.relativeMouseTarget.x;
+      this.scene.game.input.activePointer.worldX - this.relativeMouseTarget.x;
     const dy =
-      this.scene.game.input.activePointer.y - this.relativeMouseTarget.y;
+      this.scene.game.input.activePointer.worldY - this.relativeMouseTarget.y;
 
     this.playerInput.relativeMouseAngle =
       (360 / (2 * Math.PI)) * Math.atan2(dy, dx);
